@@ -1,0 +1,10 @@
+<module rename-to='orbiter'>
+  <inherits name='playn.PlayN'/>
+
+  <source path='core'/>
+  <source path='html'/>
+
+  <public path="resources" />
+
+  <entry-point class='com.britton2000.orbiter.html.OrbiterHtml'/>
+</module>
