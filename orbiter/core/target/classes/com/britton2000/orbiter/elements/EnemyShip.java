@@ -15,9 +15,9 @@ public class EnemyShip extends Element implements ElementInterface {
 	Image image;
 
 	private final String imageName = "images/EnemyShip.png";
-	protected final Gun mainGun = new Gun();
-	private final Gun sideGunLeft = new Gun();
-	private final Gun sideGunRight = new Gun();
+	private final Gun mainGun = new Gun(this);
+	private final Gun sideGunLeft = new Gun(this);
+	private final Gun sideGunRight = new Gun(this);
 	private boolean fireLeft = false;
 	private final int gunType = 3;
 

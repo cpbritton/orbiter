@@ -11,6 +11,9 @@ public class Element implements ElementInterface {
 	public ImageLayer layer;
 	protected String imageName;
 	private boolean collision = false;
+	protected boolean _explodes = true;
+	protected boolean _collides = true;
+	protected Element creator = null;
 
 	/*
 	 * (non-Javadoc)
@@ -124,9 +127,14 @@ public class Element implements ElementInterface {
 		return this.imageName;
 	}
 
+	@Override
+	public boolean collides() {
+		return _collides;
+	}
+
 	public boolean hasCollision(Element element) {
 
-		if (element == null || element.layer == null || element == this || collision) {
+		if (element == null || element.layer == null || element == this || collision || !collides() || creatorCheck(element)) {
 			return collision;
 		}
 
@@ -153,4 +161,20 @@ public class Element implements ElementInterface {
 		}
 		return collision;
 	}
+
+	private boolean creatorCheck(Element element) {
+		if (element != null && element == creator) {
+			return true;
+		}
+		return false;
+	}
+
+	public Element getCreator() {
+		return creator;
+	}
+
+	public void setCreator(Element creator) {
+		this.creator = creator;
+	}
+
 }

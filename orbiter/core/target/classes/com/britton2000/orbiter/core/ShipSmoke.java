@@ -14,10 +14,11 @@ public class ShipSmoke extends Element {
 	Image image;
 	Image image2;
 
-	public static int width, height;
 	public int smokecolour = 2;
+	protected boolean _explodes = false;
+	protected boolean _collides = false;
 
-	public ShipSmoke(int canvaswidth, int canvasheight, final GroupLayer parentLayer) {
+	public ShipSmoke(Ship ship, final GroupLayer parentLayer) {
 		image = assets().getImage("images/smokecolour.png");
 		image2 = assets().getImage("images/smokecolour.png");
 		layer = graphics().createImageLayer(image);
@@ -33,6 +34,9 @@ public class ShipSmoke extends Element {
 				log().error("Error loading image!", err);
 			}
 		});
+
+		setPosition(ship.x + ship.width * OrbiterMain.imageSize * 5 / 14, ship.y + (ship.height * OrbiterMain.imageSize * 6 / 7));
+		setCreator(ship);
 	}
 
 	@Override

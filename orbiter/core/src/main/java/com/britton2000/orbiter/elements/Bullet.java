@@ -17,13 +17,14 @@ public class Bullet extends Element {
 
 	private final String imageName = "images/Bullet.png";
 
-	public Bullet(final GroupLayer parentLayer, boolean direction) {
+	public Bullet(final GroupLayer parentLayer, Element creator, boolean direction) {
 		bulletDirection = direction;
 		image = assets().getImage(this.getImage());
 		layer = graphics().createImageLayer(image);
 		layer.setScale(OrbiterMain.imageSize, OrbiterMain.imageSize);
 		height = image.height();
 		width = image.width();
+		this.creator = creator;
 		image.addCallback(new ResourceCallback<Image>() {
 			@Override
 			public void done(Image image) {

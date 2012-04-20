@@ -3,18 +3,22 @@ package com.britton2000.orbiter.core;
 import static playn.core.PlayN.graphics;
 
 import com.britton2000.orbiter.elements.Bullet;
+import com.britton2000.orbiter.elements.Element;
 import com.britton2000.orbiter.elements.TracerBullet;
 
 public class Gun {
 
 	private int bulletCount = 0;
 	int fireRate;
+	private Element parent;
 
 	/**
+	 * @param element
 	 * 
 	 */
-	public Gun() {
+	public Gun(Element element) {
 		super();
+		parent = element;
 	}
 
 	public Bullet fireBullet(int x, int y, boolean direction, int gunType) {
@@ -25,7 +29,7 @@ public class Gun {
 				bulletCount += 2;
 				fireRate = 0;
 				Bullet b = null;
-				b = new Bullet(graphics().rootLayer(), direction);
+				b = new Bullet(graphics().rootLayer(), parent, direction);
 				b.setPosition(x, y);
 				return b;
 			}
@@ -35,7 +39,7 @@ public class Gun {
 				bulletCount += 2;
 				fireRate = 0;
 				Bullet b = null;
-				b = new TracerBullet(graphics().rootLayer(), direction);
+				b = new TracerBullet(graphics().rootLayer(), parent, direction);
 				b.setPosition(x, y);
 				return b;
 			}
@@ -44,7 +48,7 @@ public class Gun {
 			if (fireRate > 5) {
 				fireRate = 0;
 				Bullet b = null;
-				b = new Bullet(graphics().rootLayer(), direction);
+				b = new Bullet(graphics().rootLayer(), parent, direction);
 				b.setPosition(x, y);
 				return b;
 			}
@@ -53,7 +57,7 @@ public class Gun {
 			if (fireRate > 5) {
 				fireRate = 0;
 				Bullet b = null;
-				b = new TracerBullet(graphics().rootLayer(), direction);
+				b = new TracerBullet(graphics().rootLayer(), parent, direction);
 				b.setPosition(x, y);
 				return b;
 			}
@@ -65,9 +69,9 @@ public class Gun {
 				fireRate = 0;
 				Bullet b = null;
 				if (bulletCount % 2 == 0) {
-					b = new TracerBullet(graphics().rootLayer(), direction);
+					b = new TracerBullet(graphics().rootLayer(), parent, direction);
 				} else {
-					b = new Bullet(graphics().rootLayer(), direction);
+					b = new Bullet(graphics().rootLayer(), parent, direction);
 				}
 				b.setPosition(x, y);
 				return b;

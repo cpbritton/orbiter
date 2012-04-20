@@ -252,8 +252,7 @@ public class OrbiterMain implements Game, Keyboard.Listener {
 	}
 
 	private void smoke(boolean r) {
-		ShipSmoke s = new ShipSmoke(canvasWidth, canvasHeight, graphics().rootLayer());
-		s.setPosition(ship.x + ship.width * imageSize * 5 / 14, ship.y + (ship.height * imageSize * 6 / 7));
+		ShipSmoke s = new ShipSmoke(ship, graphics().rootLayer());
 		elements.add(s);
 	}
 

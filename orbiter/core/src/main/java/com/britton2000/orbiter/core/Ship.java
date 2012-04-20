@@ -23,9 +23,9 @@ public class Ship extends Element {
 	public int y2;
 	public int x2;
 	public int width, height, gunType = 1;
-	private final Gun mainGun = new Gun();
-	private final Gun sideGunLeft = new Gun();
-	private final Gun sideGunRight = new Gun();
+	private final Gun mainGun = new Gun(this);
+	private final Gun sideGunLeft = new Gun(this);
+	private final Gun sideGunRight = new Gun(this);
 	private boolean fireLeft = false;
 
 	public Ship(int canvasWidth, int canvasHeight, final GroupLayer parentLayer) {

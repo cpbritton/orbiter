@@ -48,4 +48,6 @@ public interface ElementInterface {
 
 	public abstract boolean hasCollision(Element element);
 
+	boolean collides();
+
 }

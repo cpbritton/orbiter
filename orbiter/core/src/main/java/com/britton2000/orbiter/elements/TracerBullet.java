@@ -6,8 +6,8 @@ public class TracerBullet extends Bullet {
 
 	private final String imageName = "images/TracerBullet.png";
 
-	public TracerBullet(GroupLayer parentLayer, boolean direction) {
-		super(parentLayer, direction);
+	public TracerBullet(GroupLayer parentLayer, Element creator, boolean direction) {
+		super(parentLayer, creator, direction);
 	}
 
 	@Override
