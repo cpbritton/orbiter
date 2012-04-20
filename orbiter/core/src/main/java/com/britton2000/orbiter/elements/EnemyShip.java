@@ -87,7 +87,7 @@ public class EnemyShip extends Element implements ElementInterface {
 
 	public Bullet fireMainGun() {
 		int by = y;
-		int bx = x + width * (OrbiterMain.imageSize / 2) - (2f * OrbiterMain.imageSize / 2);
+		int bx = x + width * (OrbiterMain.imageSize / 2) - (2 * OrbiterMain.imageSize / 2);
 		return mainGun.fireBullet(bx, by, false, 1);
 	}
 
