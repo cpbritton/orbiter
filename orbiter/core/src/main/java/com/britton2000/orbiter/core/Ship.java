@@ -106,7 +106,9 @@ public class Ship extends Element {
 
 	public Bullet fireMainGun() {
 		int by = y;
-		int bx = x + width * OrbiterMain.imageSize / 2 - (Bullet.width * OrbiterMain.imageSize / 2);
+
+		// @todo fix bullet width
+		int bx = x + width * OrbiterMain.imageSize / 2 - (2 * OrbiterMain.imageSize / 2);
 		return mainGun.fireBullet(bx, by, true, gunType);
 	}
 

@@ -13,7 +13,7 @@ import playn.core.ImageLayer;
 import playn.core.Keyboard;
 
 import com.britton2000.orbiter.elements.Asteroid;
-import com.britton2000.orbiter.elements.ElementInterface;
+import com.britton2000.orbiter.elements.Element;
 import com.britton2000.orbiter.elements.EnemyBeastShip;
 import com.britton2000.orbiter.elements.EnemyShip;
 import com.britton2000.orbiter.elements.Gem;
@@ -30,8 +30,8 @@ public class OrbiterMain implements Game, Keyboard.Listener {
 	private Background background;
 	private GUI gui;
 	private Menu buttons;
-	private final ArrayList<ElementInterface> elements = new ArrayList<ElementInterface>();
-	public static Stack<ElementInterface> elementSpawnQueue = new Stack<ElementInterface>();
+	private final ArrayList<Element> elements = new ArrayList<Element>();
+	public static Stack<Element> elementSpawnQueue = new Stack<Element>();
 	boolean b, a;
 	int launchRate, smokeRate, gemRate, enemyRate, toggleRate;
 	public static int imageSize = 5;
@@ -117,19 +117,39 @@ public class OrbiterMain implements Game, Keyboard.Listener {
 
 	private void processElements(float delta) {
 		if (elements != null) {
-			for (Iterator<ElementInterface> it = elements.iterator(); it.hasNext();) {
-				ElementInterface e = it.next();
+			for (Iterator<Element> it = elements.iterator(); it.hasNext();) {
+				Element e = it.next();
 				e.update(delta);
 				if (e.getY2() < 0 || e.getY() > canvasHeight) {
 					e.clear();
 					it.remove();
+				} else {
+					if (checkCollisions(e)) {
+						boolean bb = true;
+						// fire explosion
+					}
 				}
+
 			}
 		}
 
 		while (!OrbiterMain.elementSpawnQueue.isEmpty()) {
 			elements.add(OrbiterMain.elementSpawnQueue.pop());
 		}
+	}
+
+	private boolean checkCollisions(Element element) {
+		boolean collide = false;
+		if (elements != null) {
+			for (Element e : elements) {
+				collide = element.hasCollision(e);
+			}
+		}
+		if (ship != null) {
+			// collide = element.hasCollision(ship);
+		}
+
+		return collide;
 	}
 
 	@Override
@@ -203,7 +223,7 @@ public class OrbiterMain implements Game, Keyboard.Listener {
 		addElement(ship.fireGun());
 	}
 
-	public void addElement(ElementInterface e) {
+	public void addElement(Element e) {
 		if (e != null) {
 			elements.add(e);
 		}
@@ -211,7 +231,7 @@ public class OrbiterMain implements Game, Keyboard.Listener {
 
 	private void paintElements(float alpha) {
 		if (elements != null) {
-			for (ElementInterface a : elements) {
+			for (Element a : elements) {
 				a.paint(alpha);
 			}
 		}

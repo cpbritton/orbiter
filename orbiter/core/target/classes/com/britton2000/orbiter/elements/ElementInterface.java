@@ -46,4 +46,6 @@ public interface ElementInterface {
 
 	public abstract void setPosition(int x, int y);
 
+	public abstract boolean hasCollision(Element element);
+
 }

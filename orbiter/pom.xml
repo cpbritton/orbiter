@@ -14,7 +14,7 @@
   <name>Orbiter Metaproject</name>
 
   <properties>
-    <playn.version>1.1.1</playn.version>
+    <playn.version>1.2-SNAPSHOT</playn.version>
   </properties>
 
   <modules>

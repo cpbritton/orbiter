@@ -1,12 +1,16 @@
 package com.britton2000.orbiter.elements;
 
 import playn.core.ImageLayer;
+import playn.core.Layer;
+import pythagoras.f.Point;
 
 public class Element implements ElementInterface {
-	protected int y, x, y2, x2;
-	public static int width, height;
+	protected int y, x;
+	private int y2, x2;
+	public int width, height;
 	public ImageLayer layer;
 	protected String imageName;
+	private boolean collision = false;
 
 	/*
 	 * (non-Javadoc)
@@ -120,4 +124,33 @@ public class Element implements ElementInterface {
 		return this.imageName;
 	}
 
+	public boolean hasCollision(Element element) {
+
+		if (element == null || element.layer == null || element == this || collision) {
+			return collision;
+		}
+
+		if (Layer.Util.hitTest(element.layer, new Point(x, y))) {
+			collision = true;
+			return collision;
+		}
+
+		if (Layer.Util.hitTest(element.layer, new Point(x, getY2()))) {
+			collision = true;
+			return collision;
+
+		}
+
+		if (Layer.Util.hitTest(element.layer, new Point(getX2(), y))) {
+			collision = true;
+			return collision;
+
+		}
+		if (Layer.Util.hitTest(element.layer, new Point(getX2(), getY2()))) {
+			collision = true;
+			return collision;
+
+		}
+		return collision;
+	}
 }
