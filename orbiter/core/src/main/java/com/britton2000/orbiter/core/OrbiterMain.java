@@ -41,13 +41,15 @@ public class OrbiterMain implements Game, Keyboard.Listener {
 	public void init() {
 		keyboard().setListener(this);
 		graphics().setSize(canvasWidth, canvasHeight);
-		background = new Background(canvasWidth, canvasHeight, graphics().rootLayer());
+		background = new Background(canvasWidth, canvasHeight, graphics()
+				.rootLayer());
 		if (level == 1) {
 			ship = new Ship(canvasWidth, canvasHeight, graphics().rootLayer());
 
 		}
 		if (level == 0) {
-			buttons = new Menu(canvasWidth, canvasHeight, graphics().rootLayer());
+			buttons = new Menu(canvasWidth, canvasHeight, graphics()
+					.rootLayer());
 		}
 
 		gui = new GUI(graphics().rootLayer());
@@ -238,16 +240,19 @@ public class OrbiterMain implements Game, Keyboard.Listener {
 	}
 
 	private void launchAsteroid(boolean r) {
-		Asteroid a = new Asteroid(canvasWidth, canvasHeight, graphics().rootLayer());
+		Asteroid a = new Asteroid(canvasWidth, canvasHeight, graphics()
+				.rootLayer());
 
-		a.setPosition((int) Math.round((Math.random() * canvasWidth)), (int) (0 - a.layer.scaledHeight()));
+		a.setPosition((int) Math.round((Math.random() * canvasWidth)),
+				(int) (0 - a.layer.scaledHeight()));
 		elements.add(a);
 	}
 
 	private void launchGem(boolean r) {
 		Gem g = new Gem(canvasWidth, canvasHeight, graphics().rootLayer());
 
-		g.setPosition((int) Math.round((Math.random() * canvasWidth)), (int) (0 - g.layer.scaledHeight()));
+		g.setPosition((int) Math.round((Math.random() * canvasWidth)),
+				(int) (0 - g.layer.scaledHeight()));
 		elements.add(g);
 	}
 
@@ -265,7 +270,9 @@ public class OrbiterMain implements Game, Keyboard.Listener {
 			e = new EnemyShip(graphics().rootLayer());
 		}
 
-		e.setPosition((int) Math.round((Math.random() * OrbiterMain.canvasWidth)), (int) (0 - e.layer.scaledHeight()));
+		e.setPosition(
+				(int) Math.round((Math.random() * OrbiterMain.canvasWidth)),
+				(int) (0 - e.layer.scaledHeight()));
 		elements.add(e);
 	}
 }

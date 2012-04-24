@@ -14,6 +14,7 @@ public class Element implements ElementInterface {
 	protected boolean _explodes = true;
 	protected boolean _collides = true;
 	protected Element creator = null;
+	private Element collidingElement;
 
 	/*
 	 * (non-Javadoc)
@@ -132,9 +133,11 @@ public class Element implements ElementInterface {
 		return _collides;
 	}
 
+	@Override
 	public boolean hasCollision(Element element) {
 
-		if (element == null || element.layer == null || element == this || collision || !collides() || creatorCheck(element)) {
+		if (element == null || element.layer == null || element == this
+				|| collision || !collides() || creatorCheck(element)) {
 			return collision;
 		}
 
@@ -158,6 +161,10 @@ public class Element implements ElementInterface {
 			collision = true;
 			return collision;
 
+		}
+
+		if (collision) {
+			collidingElement = element;
 		}
 		return collision;
 	}
