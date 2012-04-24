@@ -133,11 +133,9 @@ public class Element implements ElementInterface {
 		return _collides;
 	}
 
-	@Override
 	public boolean hasCollision(Element element) {
 
-		if (element == null || element.layer == null || element == this
-				|| collision || !collides() || creatorCheck(element)) {
+		if (element == null || element.layer == null || element == this || collision || !collides() || creatorCheck(element)) {
 			return collision;
 		}
 
