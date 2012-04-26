@@ -14,6 +14,7 @@ import playn.core.Keyboard;
 
 import com.britton2000.orbiter.elements.Asteroid;
 import com.britton2000.orbiter.elements.Element;
+import com.britton2000.orbiter.elements.ElementInterface;
 import com.britton2000.orbiter.elements.EnemyBeastShip;
 import com.britton2000.orbiter.elements.EnemyShip;
 import com.britton2000.orbiter.elements.Gem;
@@ -30,7 +31,7 @@ public class OrbiterMain implements Game, Keyboard.Listener {
 	private Background background;
 	private GUI gui;
 	private Menu buttons;
-	private final ArrayList<Element> elements = new ArrayList<Element>();
+	private final ArrayList<ElementInterface> elements = new ArrayList<ElementInterface>();
 	public static Stack<Element> elementSpawnQueue = new Stack<Element>();
 	boolean b, a;
 	int launchRate, smokeRate, gemRate, enemyRate, toggleRate;
@@ -119,16 +120,16 @@ public class OrbiterMain implements Game, Keyboard.Listener {
 
 	private void processElements(float delta) {
 		if (elements != null) {
-			for (Iterator<Element> it = elements.iterator(); it.hasNext();) {
-				Element e = it.next();
+			for (Iterator<ElementInterface> it = elements.iterator(); it
+					.hasNext();) {
+				ElementInterface e = it.next();
 				e.update(delta);
 				if (e.getY2() < 0 || e.getY() > canvasHeight) {
 					e.clear();
 					it.remove();
 				} else {
 					if (checkCollisions(e)) {
-						boolean bb = true;
-						// fire explosion
+						e.processCollisions(delta);
 					}
 				}
 
@@ -140,10 +141,10 @@ public class OrbiterMain implements Game, Keyboard.Listener {
 		}
 	}
 
-	private boolean checkCollisions(Element element) {
+	private boolean checkCollisions(ElementInterface element) {
 		boolean collide = false;
 		if (elements != null) {
-			for (Element e : elements) {
+			for (ElementInterface e : elements) {
 				collide = element.hasCollision(e);
 			}
 		}
@@ -233,7 +234,7 @@ public class OrbiterMain implements Game, Keyboard.Listener {
 
 	private void paintElements(float alpha) {
 		if (elements != null) {
-			for (Element a : elements) {
+			for (ElementInterface a : elements) {
 				a.paint(alpha);
 			}
 		}
@@ -244,7 +245,7 @@ public class OrbiterMain implements Game, Keyboard.Listener {
 				.rootLayer());
 
 		a.setPosition((int) Math.round((Math.random() * canvasWidth)),
-				(int) (0 - a.layer.scaledHeight()));
+				(int) (0 - a.getLayer().scaledHeight()));
 		elements.add(a);
 	}
 
@@ -252,7 +253,7 @@ public class OrbiterMain implements Game, Keyboard.Listener {
 		Gem g = new Gem(canvasWidth, canvasHeight, graphics().rootLayer());
 
 		g.setPosition((int) Math.round((Math.random() * canvasWidth)),
-				(int) (0 - g.layer.scaledHeight()));
+				(int) (0 - g.getLayer().scaledHeight()));
 		elements.add(g);
 	}
 
@@ -272,7 +273,7 @@ public class OrbiterMain implements Game, Keyboard.Listener {
 
 		e.setPosition(
 				(int) Math.round((Math.random() * OrbiterMain.canvasWidth)),
-				(int) (0 - e.layer.scaledHeight()));
+				(int) (0 - e.getLayer().scaledHeight()));
 		elements.add(e);
 	}
 }

@@ -16,7 +16,8 @@ public class Asteroid extends Element {
 	Image image3;
 	Image image4;
 
-	public Asteroid(int canvaswidth, int canvasheight, final GroupLayer parentLayer) {
+	public Asteroid(int canvaswidth, int canvasheight,
+			final GroupLayer parentLayer) {
 		image = assets().getImage("images/asteroid.png");
 		image2 = assets().getImage("images/asteroid2.png");
 		image3 = assets().getImage("images/asteroid3.png");
@@ -41,4 +42,13 @@ public class Asteroid extends Element {
 		y += 15;
 	}
 
+	@Override
+	public void processCollisions(float delta) {
+
+		if (collidingElement instanceof Bullet) {
+
+			System.out.print("ooo:");
+		}
+
+	}
 }

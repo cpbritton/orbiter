@@ -8,13 +8,13 @@ public class Element implements ElementInterface {
 	protected int y, x;
 	private int y2, x2;
 	public int width, height;
-	public ImageLayer layer;
+	protected ImageLayer layer;
 	protected String imageName;
 	private boolean collision = false;
 	protected boolean _explodes = true;
 	protected boolean _collides = true;
-	protected Element creator = null;
-	private Element collidingElement;
+	protected ElementInterface creator = null;
+	protected ElementInterface collidingElement;
 
 	/*
 	 * (non-Javadoc)
@@ -133,53 +133,65 @@ public class Element implements ElementInterface {
 		return _collides;
 	}
 
-	public boolean hasCollision(Element element) {
+	@Override
+	public boolean hasCollision(ElementInterface e) {
 
-		if (element == null || element.layer == null || element == this || collision || !collides() || creatorCheck(element)) {
+		if (e == null || e.getLayer() == null || e == this || collision
+				|| !collides() || creatorCheck(e)) {
 			return collision;
 		}
 
-		if (Layer.Util.hitTest(element.layer, new Point(x, y))) {
+		if (Layer.Util.hitTest(e.getLayer(), new Point(x, y))) {
 			collision = true;
 			return collision;
 		}
 
-		if (Layer.Util.hitTest(element.layer, new Point(x, getY2()))) {
+		if (Layer.Util.hitTest(e.getLayer(), new Point(x, getY2()))) {
 			collision = true;
 			return collision;
 
 		}
 
-		if (Layer.Util.hitTest(element.layer, new Point(getX2(), y))) {
+		if (Layer.Util.hitTest(e.getLayer(), new Point(getX2(), y))) {
 			collision = true;
 			return collision;
 
 		}
-		if (Layer.Util.hitTest(element.layer, new Point(getX2(), getY2()))) {
+		if (Layer.Util.hitTest(e.getLayer(), new Point(getX2(), getY2()))) {
 			collision = true;
 			return collision;
 
 		}
 
 		if (collision) {
-			collidingElement = element;
+			collidingElement = e;
 		}
 		return collision;
 	}
 
-	private boolean creatorCheck(Element element) {
-		if (element != null && element == creator) {
+	private boolean creatorCheck(ElementInterface e) {
+		if (e != null && e == creator) {
 			return true;
 		}
 		return false;
 	}
 
-	public Element getCreator() {
+	public ElementInterface getCreator() {
 		return creator;
 	}
 
 	public void setCreator(Element creator) {
 		this.creator = creator;
+	}
+
+	@Override
+	public void processCollisions(float delta) {
+
+	}
+
+	@Override
+	public ImageLayer getLayer() {
+		return layer;
 	}
 
 }

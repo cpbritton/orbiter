@@ -1,5 +1,7 @@
 package com.britton2000.orbiter.elements;
 
+import playn.core.ImageLayer;
+
 public interface ElementInterface {
 
 	/*
@@ -30,6 +32,10 @@ public interface ElementInterface {
 	 */
 	public abstract void update(float delta);
 
+	public abstract ImageLayer getLayer();
+
+	public abstract void processCollisions(float delta);
+
 	public abstract int getY();
 
 	public abstract int getY2();
@@ -46,7 +52,7 @@ public interface ElementInterface {
 
 	public abstract void setPosition(int x, int y);
 
-	public abstract boolean hasCollision(Element element);
+	public abstract boolean hasCollision(ElementInterface element);
 
 	boolean collides();
 
