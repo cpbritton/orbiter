@@ -136,37 +136,34 @@ public class Element implements ElementInterface {
 	@Override
 	public boolean hasCollision(ElementInterface e) {
 
-		if (e == null || e.getLayer() == null || e == this || collision
-				|| !collides() || creatorCheck(e)) {
+		if (e == null || e.getLayer() == null || e == this || collision || !collides() || creatorCheck(e)) {
 			return collision;
 		}
 
 		if (Layer.Util.hitTest(e.getLayer(), new Point(x, y))) {
 			collision = true;
-			return collision;
 		}
 
 		if (Layer.Util.hitTest(e.getLayer(), new Point(x, getY2()))) {
 			collision = true;
-			return collision;
-
 		}
 
 		if (Layer.Util.hitTest(e.getLayer(), new Point(getX2(), y))) {
 			collision = true;
-			return collision;
-
 		}
 		if (Layer.Util.hitTest(e.getLayer(), new Point(getX2(), getY2()))) {
 			collision = true;
-			return collision;
-
 		}
 
 		if (collision) {
 			collidingElement = e;
 		}
 		return collision;
+	}
+
+	public void resetCollision() {
+		collision = false;
+		collidingElement = null;
 	}
 
 	private boolean creatorCheck(ElementInterface e) {

@@ -21,8 +21,7 @@ public class EnemyShip extends Element implements ElementInterface {
 	private boolean fireLeft = false;
 	private final int gunType = 3;
 
-	int damage, attack, attackNumber, enemyType, fireRate, dodge, dodgeTime,
-			followAttack;
+	int damage, attack, attackNumber, enemyType, fireRate, dodge, dodgeTime, followAttack;
 
 	public EnemyShip(final GroupLayer parentLayer) {
 		image = assets().getImage(this.getImage());
@@ -88,8 +87,7 @@ public class EnemyShip extends Element implements ElementInterface {
 
 	public Bullet fireMainGun() {
 		int by = y;
-		int bx = x + width * (OrbiterMain.imageSize / 2)
-				- (2 * OrbiterMain.imageSize / 2);
+		int bx = x + width * (OrbiterMain.imageSize / 2) - (2 * OrbiterMain.imageSize / 2);
 		return mainGun.fireBullet(bx, by, false, 1);
 	}
 
@@ -98,17 +96,24 @@ public class EnemyShip extends Element implements ElementInterface {
 		int bx = x;
 		Bullet b = null;
 		if (!fireLeft) {
-			b = sideGunLeft.fireBullet(bx
-					+ (width * OrbiterMain.imageSize * 2 / 7), by, false,
-					gunType);
+			b = sideGunLeft.fireBullet(bx + (width * OrbiterMain.imageSize * 2 / 7), by, false, gunType);
 		} else {
-			b = sideGunRight.fireBullet(bx
-					+ (width * OrbiterMain.imageSize * 4 / 7), by, false,
-					gunType);
+			b = sideGunRight.fireBullet(bx + (width * OrbiterMain.imageSize * 4 / 7), by, false, gunType);
 		}
 		if (b != null) {
 			fireLeft = !fireLeft;
 		}
 		return b;
+	}
+
+	@Override
+	public void processCollisions(float delta) {
+
+		if (collidingElement instanceof Bullet) {
+			System.out.println("Boom: Enermy Ship");
+		}
+
+		resetCollision();
+
 	}
 }

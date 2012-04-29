@@ -42,15 +42,13 @@ public class OrbiterMain implements Game, Keyboard.Listener {
 	public void init() {
 		keyboard().setListener(this);
 		graphics().setSize(canvasWidth, canvasHeight);
-		background = new Background(canvasWidth, canvasHeight, graphics()
-				.rootLayer());
+		background = new Background(canvasWidth, canvasHeight, graphics().rootLayer());
 		if (level == 1) {
 			ship = new Ship(canvasWidth, canvasHeight, graphics().rootLayer());
 
 		}
 		if (level == 0) {
-			buttons = new Menu(canvasWidth, canvasHeight, graphics()
-					.rootLayer());
+			buttons = new Menu(canvasWidth, canvasHeight, graphics().rootLayer());
 		}
 
 		gui = new GUI(graphics().rootLayer());
@@ -120,8 +118,7 @@ public class OrbiterMain implements Game, Keyboard.Listener {
 
 	private void processElements(float delta) {
 		if (elements != null) {
-			for (Iterator<ElementInterface> it = elements.iterator(); it
-					.hasNext();) {
+			for (Iterator<ElementInterface> it = elements.iterator(); it.hasNext();) {
 				ElementInterface e = it.next();
 				e.update(delta);
 				if (e.getY2() < 0 || e.getY() > canvasHeight) {
@@ -241,19 +238,16 @@ public class OrbiterMain implements Game, Keyboard.Listener {
 	}
 
 	private void launchAsteroid(boolean r) {
-		Asteroid a = new Asteroid(canvasWidth, canvasHeight, graphics()
-				.rootLayer());
+		Asteroid a = new Asteroid(canvasWidth, canvasHeight, graphics().rootLayer());
 
-		a.setPosition((int) Math.round((Math.random() * canvasWidth)),
-				(int) (0 - a.getLayer().scaledHeight()));
+		a.setPosition((int) Math.round((Math.random() * canvasWidth)), (int) (0 - a.getLayer().scaledHeight()));
 		elements.add(a);
 	}
 
 	private void launchGem(boolean r) {
 		Gem g = new Gem(canvasWidth, canvasHeight, graphics().rootLayer());
 
-		g.setPosition((int) Math.round((Math.random() * canvasWidth)),
-				(int) (0 - g.getLayer().scaledHeight()));
+		g.setPosition((int) Math.round((Math.random() * canvasWidth)), (int) (0 - g.getLayer().scaledHeight()));
 		elements.add(g);
 	}
 
@@ -271,9 +265,7 @@ public class OrbiterMain implements Game, Keyboard.Listener {
 			e = new EnemyShip(graphics().rootLayer());
 		}
 
-		e.setPosition(
-				(int) Math.round((Math.random() * OrbiterMain.canvasWidth)),
-				(int) (0 - e.getLayer().scaledHeight()));
+		e.setPosition((int) Math.round((Math.random() * OrbiterMain.canvasWidth)), (int) (0 - e.getLayer().scaledHeight()));
 		elements.add(e);
 	}
 }
