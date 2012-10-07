@@ -7,6 +7,7 @@ import playn.core.GroupLayer;
 import playn.core.Image;
 import playn.core.ResourceCallback;
 
+import com.britton2000.orbiter.core.Background;
 import com.britton2000.orbiter.core.OrbiterMain;
 
 public class Asteroid extends Element {
@@ -16,8 +17,11 @@ public class Asteroid extends Element {
 	Image image3;
 	Image image4;
 
+	int damage = 20, speed = 8, speedtimer;
+
 	public Asteroid(int canvaswidth, int canvasheight,
 			final GroupLayer parentLayer) {
+
 		image = assets().getImage("images/asteroid.png");
 		image2 = assets().getImage("images/asteroid2.png");
 		image3 = assets().getImage("images/asteroid3.png");
@@ -39,16 +43,36 @@ public class Asteroid extends Element {
 
 	@Override
 	public void update(float delta) {
-		y += 15;
+		y += Background.bgspeed;
+		y += 1;
+
+		// speedtimer += 1;
+		//
+		// if (speedtimer > 100) {
+		// speed += 1;
+		// speedtimer = 0;
+		// }
 	}
 
 	@Override
 	public void processCollisions(float delta) {
+		if (!collision)
+			return;
 
 		if (collidingElement instanceof Bullet) {
-
-			System.out.print("ooo:");
+			damage -= 10;
 		}
+
+		if (collidingElement instanceof EnemyShip
+				|| collidingElement instanceof EnemyBeastShip) {
+			damage -= 100;
+		}
+
+		if (damage < 0) {
+			_remove = true;
+		}
+
+		resetCollision();
 
 	}
 }

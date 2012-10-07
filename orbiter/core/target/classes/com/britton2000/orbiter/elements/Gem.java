@@ -7,6 +7,7 @@ import playn.core.GroupLayer;
 import playn.core.Image;
 import playn.core.ResourceCallback;
 
+import com.britton2000.orbiter.core.Background;
 import com.britton2000.orbiter.core.OrbiterMain;
 
 public class Gem extends Element {
@@ -35,7 +36,8 @@ public class Gem extends Element {
 
 	@Override
 	public void update(float delta) {
-		y += 15;
+		y += Background.bgspeed;
+		y += 1;
 	}
 
 }

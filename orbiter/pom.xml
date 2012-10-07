@@ -4,7 +4,7 @@
   <parent>
     <groupId>com.googlecode.playn</groupId>
     <artifactId>playn-project</artifactId>
-    <version>1.1.1</version>
+    <version>1.4-SNAPSHOT</version>
   </parent>
 
   <groupId>com.britton2000</groupId>
@@ -14,7 +14,7 @@
   <name>Orbiter Metaproject</name>
 
   <properties>
-    <playn.version>1.2-SNAPSHOT</playn.version>
+    <playn.version>1.4-SNAPSHOT</playn.version>
   </properties>
 
   <modules>

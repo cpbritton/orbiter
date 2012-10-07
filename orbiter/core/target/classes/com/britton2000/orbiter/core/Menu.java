@@ -22,20 +22,26 @@ public class Menu {
 		startSelected = assets().getImage("images/StartSelected.png");
 		startLayer = graphics().createImageLayer(start);
 		startLayer.setScale(OrbiterMain.imageSize, OrbiterMain.imageSize);
-		startLayer.setTranslation((canvaswidth / 2) - (start.width() * (OrbiterMain.imageSize / 2)), (canvasheight / 2) - (start.height() * 2));
+		startLayer.setTranslation((canvaswidth / 2)
+				- (start.width() * (OrbiterMain.imageSize / 2)),
+				(canvasheight / 2) - (start.height() * 2));
 
 		help = assets().getImage("images/Help.png");
 		helpSelected = assets().getImage("images/HelpSelected.png");
 		helpLayer = graphics().createImageLayer(help);
 		helpLayer.setScale(OrbiterMain.imageSize, OrbiterMain.imageSize);
-		helpLayer.setTranslation((canvaswidth / 2) - (help.width() * (OrbiterMain.imageSize / 2)), (canvasheight * 2 / 3) - help.height()
-				* (OrbiterMain.imageSize / 2));
+		helpLayer.setTranslation((canvaswidth / 2)
+				- (help.width() * (OrbiterMain.imageSize / 2)),
+				(canvasheight * 2 / 3) - help.height()
+						* (OrbiterMain.imageSize / 2));
 
 		name = assets().getImage("images/orbiterLogo.png");
 		nameLayer = graphics().createImageLayer(name);
 		nameLayer.setScale(OrbiterMain.imageSize, OrbiterMain.imageSize);
-		nameLayer.setTranslation((canvaswidth / 2) - (name.width() * (OrbiterMain.imageSize / 2)), (canvasheight * 1 / 3) - name.height()
-				* (OrbiterMain.imageSize / 2));
+		nameLayer.setTranslation((canvaswidth / 2)
+				- (name.width() * (OrbiterMain.imageSize / 2)),
+				(canvasheight * 1 / 3) - name.height()
+						* (OrbiterMain.imageSize / 2));
 
 		// logo = assets().getImage("images/SkyVaultLogo.png");
 		// logoLayer = graphics().createImageLayer(logo);
@@ -50,6 +56,14 @@ public class Menu {
 		menu.add(nameLayer);
 		// menu.add(logoLayer);
 		graphics().rootLayer().add(menu);
+
+		// pointer().setListener(new Pointer.Adapter() {
+		// @Override
+		// public void onPointerEnd(Pointer.Event event) {
+		// // addPea(event.x(), event.y());
+		// }
+		// });
+
 	}
 
 	public void render(float alpha) {

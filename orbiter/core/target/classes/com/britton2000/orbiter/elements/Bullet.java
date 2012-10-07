@@ -17,13 +17,14 @@ public class Bullet extends Element {
 
 	private final String imageName = "images/Bullet.png";
 
-	public Bullet(final GroupLayer parentLayer, Element creator, boolean direction) {
+	public Bullet(final GroupLayer parentLayer, Element creator,
+			boolean direction) {
 		bulletDirection = direction;
 		image = assets().getImage(this.getImage());
 		layer = graphics().createImageLayer(image);
 		layer.setScale(OrbiterMain.imageSize, OrbiterMain.imageSize);
-		height = image.height();
-		width = image.width();
+		height = (int) image.height();
+		width = (int) image.width();
 		this.creator = creator;
 		image.addCallback(new ResourceCallback<Image>() {
 			@Override
@@ -41,15 +42,23 @@ public class Bullet extends Element {
 	@Override
 	public void update(float delta) {
 		if (bulletDirection) {
-			y -= 15;
+			y -= 25;
 		} else {
-			y += 15;
+			y += 25;
 		}
 	}
 
 	@Override
 	public String getImage() {
 		return imageName;
+	}
+
+	@Override
+	public void processCollisions(float delta) {
+
+		_remove = true;
+		resetCollision();
+
 	}
 
 }

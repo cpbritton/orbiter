@@ -56,4 +56,10 @@ public interface ElementInterface {
 
 	boolean collides();
 
+	public abstract boolean remove();
+
+	abstract boolean creatorCheck(ElementInterface e);
+
+	public abstract ElementInterface getCreator();
+
 }

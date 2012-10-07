@@ -35,7 +35,8 @@ public class ShipSmoke extends Element {
 			}
 		});
 
-		setPosition(ship.x + ship.width * OrbiterMain.imageSize * 5 / 14, ship.y + (ship.height * OrbiterMain.imageSize * 6 / 7));
+		setPosition(ship.x + ship.width * OrbiterMain.imageSize * 5 / 14,
+				ship.y + (ship.height * OrbiterMain.imageSize * 11 / 14));
 		setCreator(ship);
 	}
 

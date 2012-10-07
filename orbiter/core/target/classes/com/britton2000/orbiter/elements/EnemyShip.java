@@ -15,14 +15,12 @@ public class EnemyShip extends Element implements ElementInterface {
 	Image image;
 
 	private final String imageName = "images/EnemyShip.png";
-	private final Gun mainGun = new Gun(this);
-	private final Gun sideGunLeft = new Gun(this);
-	private final Gun sideGunRight = new Gun(this);
+	private final Gun mainGun, sideGunLeft, sideGunRight;
 	private boolean fireLeft = false;
 	private final int gunType = 3;
 
-	int damage, attack, attackNumber, enemyType, fireRate, dodge, dodgeTime,
-			followAttack;
+	int damage = 30, attack, attackNumber, enemyType, fireRate, dodge,
+			dodgeTime, followAttack;
 
 	public EnemyShip(final GroupLayer parentLayer) {
 		image = assets().getImage(this.getImage());
@@ -39,6 +37,11 @@ public class EnemyShip extends Element implements ElementInterface {
 				log().error("Error loading image!", err);
 			}
 		});
+
+		mainGun = new Gun(this);
+		sideGunLeft = new Gun(this);
+		sideGunRight = new Gun(this);
+
 	}
 
 	@Override
@@ -110,5 +113,26 @@ public class EnemyShip extends Element implements ElementInterface {
 			fireLeft = !fireLeft;
 		}
 		return b;
+	}
+
+	@Override
+	public void processCollisions(float delta) {
+		if (!collision)
+			return;
+
+		if (collidingElement instanceof Bullet) {
+			damage -= 10;
+		}
+
+		if (collidingElement instanceof Asteroid) {
+			damage -= 100;
+		}
+
+		if (damage < 0) {
+			_remove = true;
+		}
+
+		resetCollision();
+
 	}
 }

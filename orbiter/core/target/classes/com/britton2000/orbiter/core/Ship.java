@@ -22,19 +22,18 @@ public class Ship extends Element {
 	public static int x;
 	public int y2;
 	public int x2;
-	public int width, height, gunType = 1;
-	private final Gun mainGun = new Gun(this);
-	private final Gun sideGunLeft = new Gun(this);
-	private final Gun sideGunRight = new Gun(this);
+	public int width, height, gunType = 1, health = 100;
+	private final Gun mainGun, sideGunLeft, sideGunRight;
 	private boolean fireLeft = false;
 
 	public Ship(int canvasWidth, int canvasHeight, final GroupLayer parentLayer) {
+		super();
 		image = assets().getImage("images/Ship1.png");
 		image2 = assets().getImage("images/Ship2.png");
 		layer = graphics().createImageLayer(image);
 
-		width = image.width();
-		height = image.height();
+		width = (int) image.width();
+		height = (int) image.height();
 		image.addCallback(new ResourceCallback<Image>() {
 			@Override
 			public void done(Image image) {
@@ -50,11 +49,16 @@ public class Ship extends Element {
 		layer.setScale(OrbiterMain.imageSize, OrbiterMain.imageSize);
 		x = (canvasWidth / 2);
 		y = (canvasHeight / 2);
+
+		mainGun = new Gun(this);
+		sideGunLeft = new Gun(this);
+		sideGunRight = new Gun(this);
+
 	}
 
 	@Override
 	public void render(float alpha) {
-		if (frameSwitch > 10f) {
+		if (frameSwitch > 20f) {
 			if (layer.image() == image) {
 				layer.setImage(image2);
 			} else {
@@ -92,12 +96,15 @@ public class Ship extends Element {
 	}
 
 	public Bullet fireGun() {
+
 		Bullet b = null;
-		if (gunType == 1 || gunType == 2) {
-			b = fireMainGun();
-		}
-		if (gunType == 3 || gunType == 4 || gunType == 5) {
-			b = fireSideGuns();
+		if (GunChargeBar.charge > 0) {
+			if (gunType == 1 || gunType == 2) {
+				b = fireMainGun();
+			}
+			if (gunType == 3 || gunType == 4 || gunType == 5) {
+				b = fireSideGuns();
+			}
 		}
 
 		return b;
@@ -108,7 +115,8 @@ public class Ship extends Element {
 		int by = y;
 
 		// @todo fix bullet width
-		int bx = x + width * OrbiterMain.imageSize / 2 - (2 * OrbiterMain.imageSize / 2);
+		int bx = x + width * OrbiterMain.imageSize / 2
+				- (2 * OrbiterMain.imageSize / 2);
 		return mainGun.fireBullet(bx, by, true, gunType);
 	}
 
@@ -118,9 +126,13 @@ public class Ship extends Element {
 
 		Bullet b = null;
 		if (!fireLeft) {
-			b = sideGunLeft.fireBullet(bx + (width * OrbiterMain.imageSize * 2 / 7), by, true, gunType);
+			b = sideGunLeft.fireBullet(bx
+					+ (width * OrbiterMain.imageSize * 2 / 7), by, true,
+					gunType);
 		} else {
-			b = sideGunRight.fireBullet(bx + (width * OrbiterMain.imageSize * 4 / 7), by, true, gunType);
+			b = sideGunRight.fireBullet(bx
+					+ (width * OrbiterMain.imageSize * 4 / 7), by, true,
+					gunType);
 		}
 		if (b != null) {
 			fireLeft = !fireLeft;

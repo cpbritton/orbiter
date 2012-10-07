@@ -11,10 +11,13 @@ public class Background {
 	Image bgimage, bgimage2;
 
 	float bgx, bgy, bgx2, bgy2;
+	public static int bgspeed = 8;
+	float bgspeedtimer;
 
 	public static int buttonNum = 2;
 
-	public Background(int canvaswidth, int canvasheight, final GroupLayer parentLayer) {
+	public Background(int canvaswidth, int canvasheight,
+			final GroupLayer parentLayer) {
 		Image bgimage = assets().getImage("images/Stars.png");
 		bglayer2 = graphics().createImageLayer(bgimage);
 		graphics().rootLayer().add(bglayer2);
@@ -35,8 +38,17 @@ public class Background {
 	}
 
 	public void update(float delta) {
-		bgy += 12;
-		bgy2 += 12;
+
+		bgy += bgspeed;
+		bgy2 += bgspeed;
+
+		bgspeedtimer += 1;
+
+		if (bgspeedtimer > 1000 && bgspeed < 50 && OrbiterMain.level > 0) {
+			bgspeed += (1 / 4);
+			bgspeedtimer = 0;
+		}
+
 		if (bgy >= OrbiterMain.canvasHeight) {
 			bgy = -OrbiterMain.canvasHeight;
 		}

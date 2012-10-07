@@ -11,6 +11,8 @@ import java.util.Stack;
 import playn.core.Game;
 import playn.core.ImageLayer;
 import playn.core.Keyboard;
+import playn.core.PlayN;
+import playn.core.gl.GLContext;
 
 import com.britton2000.orbiter.elements.Asteroid;
 import com.britton2000.orbiter.elements.Element;
@@ -24,10 +26,11 @@ public class OrbiterMain implements Game, Keyboard.Listener {
 	ImageLayer bglayer2;
 
 	float frameSwitch;
-	static boolean right, left, up, down, g;
-	boolean space, f, startpos, fireBullet, launchAsteroid, fire, smokeon;
+	static boolean right, left, up, down, space, g;
+	boolean f, startpos, fireBullet, launchAsteroid, fire, smokeon;
 	public final static int canvasWidth = 1280, canvasHeight = 720;
 	private Ship ship;
+	// private ScoreText scoreText;
 	private Background background;
 	private GUI gui;
 	private Menu buttons;
@@ -35,6 +38,8 @@ public class OrbiterMain implements Game, Keyboard.Listener {
 	public static Stack<Element> elementSpawnQueue = new Stack<Element>();
 	boolean b, a;
 	int launchRate, smokeRate, gemRate, enemyRate, toggleRate;
+	static int score;
+	int scoreAdd;
 	public static int imageSize = 5;
 	static int level = 1;
 
@@ -46,29 +51,43 @@ public class OrbiterMain implements Game, Keyboard.Listener {
 				.rootLayer());
 		if (level == 1) {
 			ship = new Ship(canvasWidth, canvasHeight, graphics().rootLayer());
+			// scoreText = new ScoreText();
 
 		}
-		if (level == 0) {
-			buttons = new Menu(canvasWidth, canvasHeight, graphics()
-					.rootLayer());
-		}
+		// if (level == 0) {
+		// buttons = new Menu(canvasWidth, canvasHeight, graphics()
+		// .rootLayer());
+		// }
+
+		PlayN.graphics()
+				.ctx()
+				.setTextureFilter(GLContext.Filter.NEAREST,
+						GLContext.Filter.NEAREST);
 
 		gui = new GUI(graphics().rootLayer());
 	}
 
 	@Override
 	public void update(float delta) {
+		background.update(delta);
 		if (level == 1) {
+			processElements(delta);
 			ship.update(delta);
+			gui.update(delta);
 			if (space) {
 				fireBullet(true);
 			}
+			scoreAdd += 1;
+			if (scoreAdd > 10) {
+				score += 1;
+				scoreAdd = 0;
+			}
 			launchRate += 1;
-			if (launchRate > 150) {
+			if (launchRate > 100) {
 				launchAsteroid(true);
 				launchRate = 0;
 			}
-			gemRate += 1;
+			gemRate += 0;
 			if (gemRate > 250) {
 				launchGem(true);
 				gemRate = 0;
@@ -102,19 +121,16 @@ public class OrbiterMain implements Game, Keyboard.Listener {
 					ship.gunType = 1;
 				}
 			}
-			processElements(delta);
-			background.update(delta);
 		}
 	}
 
 	@Override
 	public void paint(float alpha) {
-		if (1 == level) {
-
-			ship.render(alpha);
-			paintElements(alpha);
-		}
 		background.render(alpha);
+		if (1 == level) {
+			paintElements(alpha);
+			ship.render(alpha);
+		}
 		gui.render(alpha);
 	}
 
@@ -124,7 +140,8 @@ public class OrbiterMain implements Game, Keyboard.Listener {
 					.hasNext();) {
 				ElementInterface e = it.next();
 				e.update(delta);
-				if (e.getY2() < 0 || e.getY() > canvasHeight) {
+
+				if (e.getY2() < 0 || e.getY() > canvasHeight || e.remove()) {
 					e.clear();
 					it.remove();
 				} else {
@@ -149,7 +166,9 @@ public class OrbiterMain implements Game, Keyboard.Listener {
 			}
 		}
 		if (ship != null) {
-			// collide = element.hasCollision(ship);
+
+			// ship collisions
+			collide = element.hasCollision(ship);
 		}
 
 		return collide;

@@ -8,13 +8,22 @@ public class Element implements ElementInterface {
 	protected int y, x;
 	private int y2, x2;
 	public int width, height;
+	int damage;
 	protected ImageLayer layer;
 	protected String imageName;
-	private boolean collision = false;
+	protected boolean collision = false;
 	protected boolean _explodes = true;
 	protected boolean _collides = true;
+	protected boolean _remove = false;
 	protected ElementInterface creator = null;
 	protected ElementInterface collidingElement;
+
+	/**
+	 * 
+	 */
+	protected Element() {
+		super();
+	}
 
 	/*
 	 * (non-Javadoc)
@@ -134,6 +143,11 @@ public class Element implements ElementInterface {
 	}
 
 	@Override
+	public boolean remove() {
+		return _remove;
+	}
+
+	@Override
 	public boolean hasCollision(ElementInterface e) {
 
 		if (e == null || e.getLayer() == null || e == this || collision
@@ -143,24 +157,17 @@ public class Element implements ElementInterface {
 
 		if (Layer.Util.hitTest(e.getLayer(), new Point(x, y))) {
 			collision = true;
-			return collision;
 		}
 
 		if (Layer.Util.hitTest(e.getLayer(), new Point(x, getY2()))) {
 			collision = true;
-			return collision;
-
 		}
 
 		if (Layer.Util.hitTest(e.getLayer(), new Point(getX2(), y))) {
 			collision = true;
-			return collision;
-
 		}
 		if (Layer.Util.hitTest(e.getLayer(), new Point(getX2(), getY2()))) {
 			collision = true;
-			return collision;
-
 		}
 
 		if (collision) {
@@ -169,13 +176,22 @@ public class Element implements ElementInterface {
 		return collision;
 	}
 
-	private boolean creatorCheck(ElementInterface e) {
-		if (e != null && e == creator) {
+	public void resetCollision() {
+		collision = false;
+		collidingElement = null;
+	}
+
+	@Override
+	public boolean creatorCheck(ElementInterface e) {
+		if (e != null && (e == creator || this == e.getCreator())) {
 			return true;
+
 		}
+
 		return false;
 	}
 
+	@Override
 	public ElementInterface getCreator() {
 		return creator;
 	}
@@ -186,7 +202,8 @@ public class Element implements ElementInterface {
 
 	@Override
 	public void processCollisions(float delta) {
-
+		if (!collision)
+			return;
 	}
 
 	@Override
