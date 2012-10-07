@@ -65,6 +65,7 @@ public class OrbiterMain implements Game, Keyboard.Listener {
 						GLContext.Filter.NEAREST);
 
 		gui = new GUI(graphics().rootLayer());
+		
 	}
 
 	@Override
