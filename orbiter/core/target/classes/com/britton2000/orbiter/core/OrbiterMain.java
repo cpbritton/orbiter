@@ -1,5 +1,7 @@
 package com.britton2000.orbiter.core;
 
+//Max Britton
+
 import static playn.core.PlayN.graphics;
 import static playn.core.PlayN.keyboard;
 
@@ -65,7 +67,7 @@ public class OrbiterMain implements Game, Keyboard.Listener {
 						GLContext.Filter.NEAREST);
 
 		gui = new GUI(graphics().rootLayer());
-		
+
 	}
 
 	@Override

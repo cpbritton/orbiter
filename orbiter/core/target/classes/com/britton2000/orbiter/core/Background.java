@@ -6,6 +6,8 @@ import playn.core.GroupLayer;
 import playn.core.Image;
 import playn.core.ImageLayer;
 
+//Max Britton
+
 public class Background {
 	ImageLayer bglayer, bglayer2;
 	Image bgimage, bgimage2;

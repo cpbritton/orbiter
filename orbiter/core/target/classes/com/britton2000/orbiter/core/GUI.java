@@ -6,6 +6,8 @@ import playn.core.GroupLayer;
 import playn.core.Image;
 import playn.core.ImageLayer;
 
+//Max Britton
+
 public class GUI {
 	ImageLayer guiLayer, nameLayer;
 	Image gui, name;

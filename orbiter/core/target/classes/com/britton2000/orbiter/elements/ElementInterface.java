@@ -1,5 +1,7 @@
 package com.britton2000.orbiter.elements;
 
+//Max Britton
+
 import playn.core.ImageLayer;
 
 public interface ElementInterface {

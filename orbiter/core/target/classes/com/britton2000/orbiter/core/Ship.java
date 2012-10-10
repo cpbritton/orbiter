@@ -1,5 +1,7 @@
 package com.britton2000.orbiter.core;
 
+//Max Britton
+
 import static playn.core.PlayN.assets;
 import static playn.core.PlayN.graphics;
 import static playn.core.PlayN.log;
