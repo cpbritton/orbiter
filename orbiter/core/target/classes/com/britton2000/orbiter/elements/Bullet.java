@@ -25,6 +25,7 @@ public class Bullet extends Element {
 		image = assets().getImage(this.getImage());
 		layer = graphics().createImageLayer(image);
 		layer.setScale(OrbiterMain.imageSize, OrbiterMain.imageSize);
+		layer.setDepth(2);
 		height = (int) image.height();
 		width = (int) image.width();
 		this.creator = creator;
@@ -33,7 +34,6 @@ public class Bullet extends Element {
 			public void done(Image image) {
 				parentLayer.add(layer);
 			}
-
 			@Override
 			public void error(Throwable err) {
 				log().error("Error loading image!", err);
@@ -44,9 +44,9 @@ public class Bullet extends Element {
 	@Override
 	public void update(float delta) {
 		if (bulletDirection) {
-			y -= 25;
+			y -= 6 * OrbiterMain.imageSize;
 		} else {
-			y += 25;
+			y += 6 * OrbiterMain.imageSize;
 		}
 	}
 
@@ -57,10 +57,11 @@ public class Bullet extends Element {
 
 	@Override
 	public void processCollisions(float delta) {
-
-		_remove = true;
+		
+		if (!(collidingElement instanceof Bullet) || !(collidingElement instanceof Explosion)) {
+			_remove = true;
+		}
 		resetCollision();
-
 	}
 
 }

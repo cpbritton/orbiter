@@ -11,25 +11,27 @@ import playn.core.ResourceCallback;
 
 import com.britton2000.orbiter.core.Background;
 import com.britton2000.orbiter.core.OrbiterMain;
+import com.britton2000.orbiter.core.Ship;
 
 public class Asteroid extends Element {
 
 	Image image;
+	Image image1;
 	Image image2;
 	Image image3;
-	Image image4;
 
-	int damage = 20, speed = 8, speedtimer;
+	int health = 20, speed, speedtimer, chose, imageNumber, xSpeed, ySpeed, xMoveLeftOrRight;
 
-	public Asteroid(int canvaswidth, int canvasheight,
+	public Asteroid(float canvaswidth, float canvasheight,
 			final GroupLayer parentLayer) {
 
-		image = assets().getImage("images/asteroid.png");
-		image2 = assets().getImage("images/asteroid2.png");
-		image3 = assets().getImage("images/asteroid3.png");
-		image4 = assets().getImage("images/asteroid4.png");
+		image = assets().getImage("images/asteroids/asteroid.png");
+		image1 = assets().getImage("images/asteroids/asteroid2.png");
+		image2 = assets().getImage("images/asteroids/asteroid3.png");
+		image3 = assets().getImage("images/asteroids/asteroid4.png");
 		layer = graphics().createImageLayer(image);
 		layer.setScale(OrbiterMain.imageSize, OrbiterMain.imageSize);
+		layer.setDepth(3);
 		image.addCallback(new ResourceCallback<Image>() {
 			@Override
 			public void done(Image image) {
@@ -46,14 +48,36 @@ public class Asteroid extends Element {
 	@Override
 	public void update(float delta) {
 		y += Background.bgspeed;
-		y += 1;
-
+		y += ySpeed;
+		if (xMoveLeftOrRight < 5) {
+			x -= xSpeed;
+		}else if (xMoveLeftOrRight >= 5) {
+			x += xSpeed;
+		}
+		if (chose < 3) {
+			chose += 1;
+		}
+		if (chose < 2) {
+			imageNumber = (int) (Math.random() * 3);
+			ySpeed = (int) (Math.random() * OrbiterMain.imageSize) + 1;
+			xSpeed = (int) (Math.random() * OrbiterMain.imageSize);
+			xMoveLeftOrRight = (int) (Math.random() * 10);
+		}
+		if (imageNumber == 0) {
+			layer.setImage(image);
+		} else if (imageNumber == 1) {
+			layer.setImage(image1);
+		} else if (imageNumber == 2) {
+			layer.setImage(image2);
+		}else if (imageNumber == 3) {
+			layer.setImage(image3);
+		}
 		// speedtimer += 1;
 		//
 		// if (speedtimer > 100) {
 		// speed += 1;
 		// speedtimer = 0;
-		// }
+		// }}
 	}
 
 	@Override
@@ -62,19 +86,29 @@ public class Asteroid extends Element {
 			return;
 
 		if (collidingElement instanceof Bullet) {
-			damage -= 10;
+			health -= 10;
+		}
+		
+		if (collidingElement instanceof TracerBullet) {
+			health -= 20;
 		}
 
 		if (collidingElement instanceof EnemyShip
 				|| collidingElement instanceof EnemyBeastShip) {
-			damage -= 100;
+			health -= 100;
+		}
+		
+		if (collidingElement instanceof Ship) {
+			health -= 100;
 		}
 
-		if (damage < 0) {
+		if (health <= 0) {
 			_remove = true;
 		}
 
 		resetCollision();
 
 	}
+	
+	
 }

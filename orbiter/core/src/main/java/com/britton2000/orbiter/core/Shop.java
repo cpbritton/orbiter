@@ -13,6 +13,7 @@ public class Shop {
 	public Shop() {
 
 		menu = graphics().createGroupLayer();
+//		layer.setDepth(100);
 
 	}
 

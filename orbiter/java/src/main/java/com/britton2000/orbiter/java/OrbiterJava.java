@@ -2,13 +2,17 @@ package com.britton2000.orbiter.java;
 
 import playn.core.PlayN;
 import playn.java.JavaPlatform;
+import playn.java.JavaPlatform.Config;
 
 import com.britton2000.orbiter.core.OrbiterMain;
 
 public class OrbiterJava {
 
 	public static void main(String[] args) {
-		JavaPlatform platform = JavaPlatform.register();
+		Config config = new Config();
+	      config.width = 1440;
+	      config.height = 768;
+	      JavaPlatform platform = JavaPlatform.register(config);
 		platform.assets().setPathPrefix("com/britton2000/orbiter/resources");
 		PlayN.run(new OrbiterMain());
 	}

@@ -28,72 +28,88 @@ public class OrbiterMain implements Game, Keyboard.Listener {
 	ImageLayer bglayer2;
 
 	float frameSwitch;
-	static boolean right, left, up, down, space, g;
-	boolean f, startpos, fireBullet, launchAsteroid, fire, smokeon;
-	public final static int canvasWidth = 1280, canvasHeight = 720;
-	private Ship ship;
+	static boolean right, left, up, down, space, g, enter, escape, pause = false, initiateObjects = false;
+	boolean f, startpos, fireBullet, launchAsteroid, fire, smokeon, b, a;
+	static boolean reset;
+	public static float screenWidth, screenHeight, canvasWidth, canvasHeight, imageSize;
+	public static Ship ship;
 	// private ScoreText scoreText;
 	private Background background;
 	private GUI gui;
-	private Menu buttons;
-	private final ArrayList<ElementInterface> elements = new ArrayList<ElementInterface>();
+	private Menu menu;
+	private ArrayList<ElementInterface> elements = new ArrayList<ElementInterface>();
 	public static Stack<Element> elementSpawnQueue = new Stack<Element>();
-	boolean b, a;
-	int launchRate, smokeRate, gemRate, enemyRate, toggleRate;
-	static int score;
-	int scoreAdd;
-	public static int imageSize = 5;
-	static int level = 1;
+	int asteroidSpawnRate, smokeRate, gemSpawnRate, enemyRate, toggleRate, scoreAdd, pauseToggleRate;
+	static int initiateObjectsNumber = 0, score, level = 0;
 
 	@Override
 	public void init() {
-		keyboard().setListener(this);
-		graphics().setSize(canvasWidth, canvasHeight);
-		background = new Background(canvasWidth, canvasHeight, graphics()
-				.rootLayer());
-		if (level == 1) {
-			ship = new Ship(canvasWidth, canvasHeight, graphics().rootLayer());
-			// scoreText = new ScoreText();
-
+		screenWidth = graphics().screenWidth();
+		screenHeight = graphics().screenHeight();
+		if ((screenWidth / 320) > (screenHeight / 180)) {
+			imageSize = screenHeight / 180;
+			canvasWidth = imageSize * 320;
+			canvasHeight = imageSize * 180;
 		}
-		// if (level == 0) {
-		// buttons = new Menu(canvasWidth, canvasHeight, graphics()
-		// .rootLayer());
-		// }
-
-		PlayN.graphics()
-				.ctx()
-				.setTextureFilter(GLContext.Filter.NEAREST,
-						GLContext.Filter.NEAREST);
-
+		if ((screenWidth / 320) < (screenHeight / 180)) {
+			imageSize = screenWidth / 320;
+			canvasWidth = imageSize * 320;
+			canvasHeight = imageSize * 180;
+		}
+		keyboard().setListener(this);
+		//graphics().setSize((int)canvasWidth, (int)canvasHeight);
+		PlayN.graphics().ctx().setTextureFilter(GLContext.Filter.NEAREST, GLContext.Filter.NEAREST);
+		background = new Background(canvasWidth, canvasHeight, graphics().rootLayer());
 		gui = new GUI(graphics().rootLayer());
-
+		ship = new Ship(canvasWidth, canvasHeight, graphics().rootLayer());
+		menu = new Menu(canvasWidth, canvasHeight, graphics().rootLayer());
 	}
 
 	@Override
 	public void update(float delta) {
-		background.update(delta);
-		if (level == 1) {
+		if (reset == true) {
+			reset();
+		}
+		if (pauseToggleRate < 6) {
+			pauseToggleRate += 1;
+		}
+		if (escape && pauseToggleRate > 5 && level == 1) {
+			pauseToggleRate = 0;
+			if (pause == false) {
+				pause = true;
+			} else if (pause == true) {
+				pause = false;
+			}
+		}
+		
+		
+		if (level == 0 || pause) {
+			menu.update(delta);
+			gui.update(delta);
+		} else if (level == 1) {
+
 			processElements(delta);
 			ship.update(delta);
 			gui.update(delta);
+			background.update(delta);
+			menu.update(delta);
+			
 			if (space) {
 				fireBullet(true);
+			}else{
+				// recharge gun
 			}
-			scoreAdd += 1;
-			if (scoreAdd > 10) {
-				score += 1;
-				scoreAdd = 0;
-			}
-			launchRate += 1;
-			if (launchRate > 100) {
+			
+			//spawn asteroid
+			asteroidSpawnRate += 1;
+			if (asteroidSpawnRate > 100) {
 				launchAsteroid(true);
-				launchRate = 0;
+				asteroidSpawnRate = 0;
 			}
-			gemRate += 0;
-			if (gemRate > 250) {
+			gemSpawnRate += 0;
+			if (gemSpawnRate > 250) {
 				launchGem(true);
-				gemRate = 0;
+				gemSpawnRate = 0;
 			}
 			smokeRate = 0;
 			if (smokeon == true) {
@@ -102,13 +118,14 @@ public class OrbiterMain implements Game, Keyboard.Listener {
 					smokeRate = 0;
 				}
 			}
-
 			enemyRate += 1;
 			if (enemyRate > 500) {
 				launchEnemy(true);
 				enemyRate = 0;
 			}
-			toggleRate += 1;
+			if (toggleRate < 6) {
+				toggleRate += 1;
+			}
 			if (f && toggleRate > 5) {
 				toggleRate = 0;
 				if (smokeon == false) {
@@ -126,34 +143,95 @@ public class OrbiterMain implements Game, Keyboard.Listener {
 			}
 		}
 	}
+	
+	public void reset() {
+		if (reset == true) {
+			reset = false;
+		}
+		if (ship != null) {
+			ship.clear();
+		}
+		ship = new Ship(canvasWidth, canvasHeight, graphics().rootLayer());
+		
+		if (elements != null) {
+			for (Iterator<ElementInterface> it = elements.iterator(); it.hasNext();) {
+					ElementInterface e = it.next();					
+				e.clear();
+				it.remove();
+					
+			}
+		}
+		elements = new ArrayList<ElementInterface>();
+		
+		if (background != null) {
+			background.clear();
+		}
+		background = new Background(canvasWidth, canvasHeight, graphics().rootLayer());
+		
+		if (gui !=null) {
+			gui.clear();
+		}
+		gui = new GUI(graphics().rootLayer());
+	}
 
 	@Override
 	public void paint(float alpha) {
 		background.render(alpha);
-		if (1 == level) {
+		if (level == 0) {
+			menu.render(alpha);
+		}
+		if (level == 1) {
 			paintElements(alpha);
 			ship.render(alpha);
+			gui.render(alpha);
+			menu.render(alpha);
 		}
-		gui.render(alpha);
+
+		
 	}
 
 	private void processElements(float delta) {
 		if (elements != null) {
+					
 			for (Iterator<ElementInterface> it = elements.iterator(); it
 					.hasNext();) {
 				ElementInterface e = it.next();
 				e.update(delta);
 
-				if (e.getY2() < 0 || e.getY() > canvasHeight || e.remove()) {
+				if (checkCollisions(e)) {
+					e.processCollisions(delta);
+				}
+				
+				//check ship collision
+				if (ship.hasCollision(e)) {
+					ship.processCollisions(delta);
+				}
+			}
+			
+			
+			// now process collisions
+			for (Iterator<ElementInterface> it = elements.iterator(); it
+					.hasNext();) {
+				ElementInterface e = it.next();
+								
+				if (e.getLayer().destroyed() ){
+					//no op when already destroyed
+				}else if (e.getY2() < 0 || e.getY() > canvasHeight){
+				  e.clear();
+				  it.remove();
+				} else if( e.toRemove()) {
 					e.clear();
 					it.remove();
-				} else {
-					if (checkCollisions(e)) {
-						e.processCollisions(delta);
-					}
 				}
-
+				
 			}
+			
+			if (ship.toRemove()){
+			//game over!!!
+				level = 0;
+				reset();
+			}
+			
 		}
 
 		while (!OrbiterMain.elementSpawnQueue.isEmpty()) {
@@ -198,6 +276,18 @@ public class OrbiterMain implements Game, Keyboard.Listener {
 		case S:
 			down = true;
 			break;
+		case LEFT:
+			left = true;
+			break;
+		case RIGHT:
+			right = true;
+			break;
+		case UP:
+			up = true;
+			break;
+		case DOWN:
+			down = true;
+			break;
 		case SPACE:
 			space = true;
 			break;
@@ -207,8 +297,13 @@ public class OrbiterMain implements Game, Keyboard.Listener {
 		case G:
 			g = true;
 			break;
+		case ENTER:
+			enter = true;
+			break;
+		case ESCAPE:
+			escape = true;
+			break;
 		}
-
 	}
 
 	@Override
@@ -231,6 +326,17 @@ public class OrbiterMain implements Game, Keyboard.Listener {
 			break;
 		case S:
 			down = false;
+		case LEFT:
+			left = false;
+			break;
+		case RIGHT:
+			right = false;
+			break;
+		case UP:
+			up = false;
+			break;
+		case DOWN:
+			down = false;
 			break;
 		case SPACE:
 			space = false;
@@ -240,6 +346,12 @@ public class OrbiterMain implements Game, Keyboard.Listener {
 			break;
 		case G:
 			g = false;
+			break;
+		case ENTER:
+			enter = false;
+			break;
+		case ESCAPE:
+			escape = false;
 			break;
 		}
 	}

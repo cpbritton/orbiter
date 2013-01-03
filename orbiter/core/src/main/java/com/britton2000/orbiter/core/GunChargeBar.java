@@ -10,37 +10,42 @@ import playn.core.ImageLayer;
 public class GunChargeBar {
 
 	Canvas canvas;
-	static float charge = 100;
-	float totalCharge = 100;
+	static float charge;
+	float totalCharge = 20;
 	float chargeBarWidth;
 	float initialWidth;
 	float chargeReGen;
 	float chargeReGenSpeed = 10;
 
 	public GunChargeBar() {
-		initialWidth = 255;
-		CanvasImage image = graphics().createImage(260, 25);
+		charge = totalCharge;
+		initialWidth = 51 * OrbiterMain.imageSize;
+		CanvasImage image = graphics().createImage(51 * OrbiterMain.imageSize, 5 * OrbiterMain.imageSize);
 		canvas = image.canvas();
 		canvas.setFillColor(0xaa00ff00);
 
 		ImageLayer layer = graphics().createImageLayer(image);
-		layer.setTranslation(1015, 685);
+		layer.setTranslation(267 * OrbiterMain.imageSize, 11 * OrbiterMain.imageSize);
 		graphics().rootLayer().add(layer);
 
+		layer.setDepth(101);
 	}
 
 	private void updateHealth() {
 		canvas.clear();
-		canvas.fillRect(0, 0, chargeBarWidth, 25);
+		canvas.fillRect(0, 0, chargeBarWidth, 5 * OrbiterMain.imageSize);
 	}
 
 	public void update(float delta) {
 		chargeBarWidth = (charge / totalCharge) * initialWidth;
 		chargeReGen += 1;
-		if (charge < 100 && chargeReGen > chargeReGenSpeed
+		if (charge < totalCharge && chargeReGen > chargeReGenSpeed
 				&& OrbiterMain.space == false) {
 			charge += 1;
 			chargeReGen = 1;
+		}
+		if (OrbiterMain.level == 0) {
+			canvas.clear();
 		}
 		// if (OrbiterMain.space == true) {
 		// charge -= 10;
@@ -49,6 +54,10 @@ public class GunChargeBar {
 
 	public void paint(float alpha) {
 		updateHealth();
+	}
+
+	public void clear() {
+		canvas.clear();
 	}
 
 }

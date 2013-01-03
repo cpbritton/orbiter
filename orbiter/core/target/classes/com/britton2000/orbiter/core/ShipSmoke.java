@@ -16,7 +16,7 @@ public class ShipSmoke extends Element {
 	Image image;
 	Image image2;
 
-	public int smokecolour = 2;
+	public int smokecolour = 1;
 	protected boolean _explodes = false;
 	protected boolean _collides = false;
 
@@ -25,6 +25,7 @@ public class ShipSmoke extends Element {
 		image2 = assets().getImage("images/smokecolour.png");
 		layer = graphics().createImageLayer(image);
 		layer.setScale(OrbiterMain.imageSize, OrbiterMain.imageSize);
+		layer.setDepth(2);
 		image.addCallback(new ResourceCallback<Image>() {
 			@Override
 			public void done(Image image) {
@@ -37,8 +38,9 @@ public class ShipSmoke extends Element {
 			}
 		});
 
-		setPosition(ship.x + ship.width * OrbiterMain.imageSize * 5 / 14,
-				ship.y + (ship.height * OrbiterMain.imageSize * 11 / 14));
+		float x = OrbiterMain.ship.getX() + ship.width * OrbiterMain.imageSize * 5 / 14;
+		float y = OrbiterMain.ship.getY() + (ship.height * OrbiterMain.imageSize * 11 / 14);
+		setPosition(Math.round(x), Math.round(y));
 		setCreator(ship);
 	}
 

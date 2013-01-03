@@ -53,12 +53,16 @@ public interface ElementInterface {
 	public abstract void setX(int x);
 
 	public abstract void setPosition(int x, int y);
+	
+	public abstract void setCollision(boolean collides);
+	
+	public abstract void setCollidingElement(ElementInterface element);
 
 	public abstract boolean hasCollision(ElementInterface element);
 
 	boolean collides();
 
-	public abstract boolean remove();
+	public abstract boolean toRemove();
 
 	abstract boolean creatorCheck(ElementInterface e);
 

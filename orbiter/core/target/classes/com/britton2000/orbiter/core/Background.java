@@ -13,26 +13,33 @@ public class Background {
 	Image bgimage, bgimage2;
 
 	float bgx, bgy, bgx2, bgy2;
-	public static int bgspeed = 8;
+	public static float bgspeed;
 	float bgspeedtimer;
 
 	public static int buttonNum = 2;
 
-	public Background(int canvaswidth, int canvasheight,
+	public Background(float canvaswidth, float canvasheight,
 			final GroupLayer parentLayer) {
-		Image bgimage = assets().getImage("images/Stars.png");
+		Image bgimage = assets().getImageSync("images/background.png");
 		bglayer2 = graphics().createImageLayer(bgimage);
 		graphics().rootLayer().add(bglayer2);
 		bglayer2.setScale(OrbiterMain.imageSize, OrbiterMain.imageSize);
+		bglayer2.setVisible(false);
+		bglayer2.setDepth(1);
 		bgx = 0;
 		bgy = -OrbiterMain.canvasHeight;
 
-		Image bgimage2 = assets().getImage("images/Stars.png");
+		Image bgimage2 = assets().getImageSync("images/background.png");
+		
 		bglayer = graphics().createImageLayer(bgimage2);
 		graphics().rootLayer().add(bglayer);
 		bglayer.setScale(OrbiterMain.imageSize, OrbiterMain.imageSize);
+		bglayer.setVisible(false);
+		bglayer.setDepth(1);
 		bgx2 = 0;
 		bgy2 = 0;
+		
+		bgspeed = 2 * OrbiterMain.imageSize;
 	}
 
 	public void render(float alpha) {
@@ -40,14 +47,21 @@ public class Background {
 	}
 
 	public void update(float delta) {
+		if (OrbiterMain.level == 0) {
+			bglayer.setVisible(false);
+			bglayer2.setVisible(false);
+		}
+		if (OrbiterMain.level == 1) {
+			bglayer.setVisible(true);
+			bglayer2.setVisible(true);
+		}
 
 		bgy += bgspeed;
 		bgy2 += bgspeed;
 
 		bgspeedtimer += 1;
-
-		if (bgspeedtimer > 1000 && bgspeed < 50 && OrbiterMain.level > 0) {
-			bgspeed += (1 / 4);
+		if (bgspeedtimer > 1000 && bgspeed < 30 && OrbiterMain.level == 1) {
+			bgspeed += (OrbiterMain.imageSize * 2 / 8);
 			bgspeedtimer = 0;
 		}
 
@@ -62,5 +76,10 @@ public class Background {
 	public void paint(float alpha) {
 		bglayer.setTranslation(bgx, bgy);
 		bglayer2.setTranslation(bgx2, bgy2);
+	}
+	
+	public void clear() {
+		bglayer.destroy();
+		bglayer2.destroy();
 	}
 }

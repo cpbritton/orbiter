@@ -4,7 +4,7 @@
   <parent>
     <groupId>com.britton2000</groupId>
     <artifactId>orbiter</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
+    <version>0.0.1</version>
   </parent>
 
   <artifactId>orbiter-java</artifactId>
@@ -24,6 +24,69 @@
       <version>${playn.version}</version>
     </dependency>
   </dependencies>
+  
+  <build>
+  <defaultGoal>package</defaultGoal>
+  <directory>${basedir}/target</directory>
+  <finalName>${artifactId}-${version}</finalName>
+  <plugins>
+        <plugin>
+        <groupId>com.googlecode.mavennatives</groupId>
+        <artifactId>maven-nativedependencies-plugin</artifactId>
+        <version>0.0.7</version>
+        <executions>
+          <execution>
+            <id>unpacknatives</id>
+            <phase>generate-resources</phase>
+            <goals> <goal>copy</goal> </goals>
+          </execution>
+        </executions>
+      </plugin>
+  		
+		<plugin>
+			<artifactId>maven-dependency-plugin</artifactId>
+			<executions>
+				<execution>
+					<id>unpack-dependencies</id>
+					<phase>package</phase>
+					<goals>
+						<goal>unpack-dependencies</goal>
+					</goals>
+				</execution>
+			</executions>
+		</plugin>
+		<plugin>
+			<artifactId>maven-jar-plugin</artifactId>
+			<configuration>
+				<archive>
+					<manifest>
+					    <addClasspath>true</addClasspath>
+						<mainClass>com.britton2000.orbiter.java.OrbiterJava</mainClass>
+					</manifest>
+				</archive>
+			</configuration>
+		</plugin>
+		<plugin>
+		<artifactId>maven-assembly-plugin</artifactId>
+        <version>2.4</version>
+        <configuration>
+          <descriptorRefs>
+            <descriptorRef>jar-with-dependencies</descriptorRef>
+          </descriptorRefs>
+           <archive>
+            <manifest>
+              <mainClass>com.britton2000.orbiter.java.OrbiterJava</mainClass>
+            </manifest>
+          </archive>
+        </configuration>
+        </plugin>
+	</plugins>
+	<resources>
+		<resource>
+			<directory>${basedir}/target/dependency</directory>
+		</resource>
+	</resources>
+</build>
 
   <profiles>
     <!-- allows testing of Java backend via: mvn test -Ptest-java -->
@@ -47,7 +110,7 @@
               </execution>
             </executions>
           </plugin>
-        </plugins>
+         </plugins> 
       </build>
     </profile>
   </profiles>

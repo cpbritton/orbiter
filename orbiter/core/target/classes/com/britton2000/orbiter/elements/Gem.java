@@ -18,11 +18,14 @@ public class Gem extends Element {
 	Image image2;
 	Image image3;
 	Image image4;
+	
+	int chose, xSpeed, ySpeed, xMoveLeftOrRight;
 
-	public Gem(int canvaswidth, int canvasheight, final GroupLayer parentLayer) {
+	public Gem(float canvaswidth, float canvasheight, final GroupLayer parentLayer) {
 		image = assets().getImage("images/gem.png");
 		layer = graphics().createImageLayer(image);
 		layer.setScale(OrbiterMain.imageSize, OrbiterMain.imageSize);
+		layer.setDepth(3);
 		image.addCallback(new ResourceCallback<Image>() {
 			@Override
 			public void done(Image image) {
@@ -39,7 +42,20 @@ public class Gem extends Element {
 	@Override
 	public void update(float delta) {
 		y += Background.bgspeed;
-		y += 1;
+		y += ySpeed;
+		if (xMoveLeftOrRight < 5) {
+			x -= xSpeed;
+		}else if (xMoveLeftOrRight >= 5) {
+			x += xSpeed;
+		}
+		if (chose < 3) {
+			chose += 1;
+		}
+		if (chose < 2) {
+			ySpeed = (int) (Math.random() * OrbiterMain.imageSize) + 1;
+			xSpeed = (int) (Math.random() * OrbiterMain.imageSize);
+			xMoveLeftOrRight = (int) (Math.random() * 10);
+		}
 	}
 
 }
