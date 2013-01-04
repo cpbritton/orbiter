@@ -8,7 +8,7 @@ import playn.core.Image;
 import playn.core.ImageLayer;
 import playn.core.Pointer;
 
-//Max Britton
+//Max Britton hi
 
 public class GUI {
 	ImageLayer scoreLayer, statsLayer, pauseLayer, nameLayer;
