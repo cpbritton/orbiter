@@ -31,7 +31,8 @@ public class OrbiterMain implements Game, Keyboard.Listener {
 	static boolean right, left, up, down, space, g, enter, escape, pause = false, initiateObjects = false;
 	boolean f, startpos, fireBullet, launchAsteroid, fire, smokeon, b, a;
 	static boolean reset;
-	public static float screenWidth, screenHeight, canvasWidth, canvasHeight, imageSize;
+	// public static float screenWidth, screenHeight;
+	public static float imageSize = 4.0f, canvasWidth = 1280f, canvasHeight = 720f;
 	public static Ship ship;
 	// private ScoreText scoreText;
 	private Background background;
@@ -44,25 +45,33 @@ public class OrbiterMain implements Game, Keyboard.Listener {
 
 	@Override
 	public void init() {
-		screenWidth = graphics().screenWidth();
-		screenHeight = graphics().screenHeight();
-		if ((screenWidth / 320) > (screenHeight / 180)) {
-			imageSize = screenHeight / 180;
+
+		if (graphics().height() != canvasHeight && graphics().height() > 0) {
+			canvasHeight = graphics().height();
+		}
+		if (graphics().width() != canvasWidth && graphics().width() > 0) {
+			canvasWidth = graphics().width();
+		}
+
+		if ((canvasWidth / 320) > (canvasHeight / 180)) {
+			imageSize = canvasHeight / 180;
 			canvasWidth = imageSize * 320;
 			canvasHeight = imageSize * 180;
 		}
-		if ((screenWidth / 320) < (screenHeight / 180)) {
-			imageSize = screenWidth / 320;
+		if ((canvasWidth / 320) < (canvasHeight / 180)) {
+			imageSize = canvasWidth / 320;
 			canvasWidth = imageSize * 320;
 			canvasHeight = imageSize * 180;
 		}
+
 		keyboard().setListener(this);
-		// graphics().setSize((int)canvasWidth, (int)canvasHeight);
+
 		PlayN.graphics().ctx().setTextureFilter(GLContext.Filter.NEAREST, GLContext.Filter.NEAREST);
 		background = new Background(canvasWidth, canvasHeight, graphics().rootLayer());
 		gui = new GUI(graphics().rootLayer());
 		ship = new Ship(canvasWidth, canvasHeight, graphics().rootLayer());
 		menu = new Menu(canvasWidth, canvasHeight, graphics().rootLayer());
+
 	}
 
 	@Override

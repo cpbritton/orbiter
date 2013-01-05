@@ -52,10 +52,21 @@ public class OrbiterActivity extends GameActivity {
 	 * descriptor #59 I public static final int BUTTON_DPAD_LEFT = 21; // Field
 	 * descriptor #59 I public static final int BUTTON_R3 = 107; // Field
 	 * descriptor #59 I public static final int BUTTON_L3 = 106;
+	 * 
+	 * OUYA Color Default Function O green select U blue options (Android's menu
+	 * function) Y yellow - A red back/cancel Please use the naming conventions
+	 * below when referring to the controller buttons in help screens for your
+	 * game:
+	 * 
+	 * O, U, Y, A System (the home button) D-Pad LS (the left joystick movement)
+	 * L1 (the left bumper) L2 (the left trigger) L3 (the button function of
+	 * pressing the left joystick straight down) RS R1 R2 R3 Touchpad (not
+	 * "Trackpad")
 	 */
 
 	@Override
 	public boolean onKeyDown(int keyCode, KeyEvent event) {
+		System.out.println("Key down: " + keyCode);
 		return super.onKeyDown(keyMapper(keyCode), event);
 	}
 
@@ -68,10 +79,16 @@ public class OrbiterActivity extends GameActivity {
 		// remap OUYA Buttons and DPAD to enown keytypes
 		// W S A D , SPACE , ESC, G ,F
 
-		OuyaController.interpret(keyCode);
-
-		if (keyCode == OuyaController.BUTTON_DPAD_UP) {
-			keyCode = 0;
+		if (keyCode == OuyaController.BUTTON_L1) {
+			keyCode = KeyEvent.KEYCODE_G;
+		} else if (keyCode == OuyaController.BUTTON_R1) {
+			keyCode = KeyEvent.KEYCODE_F;
+		} else if (keyCode == OuyaController.BUTTON_L2 || keyCode == OuyaController.BUTTON_R2) {
+			keyCode = KeyEvent.KEYCODE_SPACE;
+		} else if (keyCode == OuyaController.BUTTON_U) {
+			keyCode = KeyEvent.KEYCODE_ESCAPE;
+		} else if (keyCode == OuyaController.BUTTON_O) {
+			keyCode = KeyEvent.KEYCODE_ENTER;
 		}
 
 		return keyCode;
@@ -89,6 +106,7 @@ public class OrbiterActivity extends GameActivity {
 	public boolean onGenericMotionEvent(MotionEvent event) {
 		int odid = event.getDeviceId();
 		boolean handled = OuyaController.onGenericMotionEvent(event);
+		System.out.println("Motion Event: " + event.describeContents());
 
 		OuyaController c = OuyaController.getControllerByDeviceId(event.getDeviceId());
 		if (c != null) {
