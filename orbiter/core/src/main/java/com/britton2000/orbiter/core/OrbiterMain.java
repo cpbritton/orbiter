@@ -1,5 +1,7 @@
 package com.britton2000.orbiter.core;
 
+//Max Britton hi
+
 import static playn.core.PlayN.graphics;
 import static playn.core.PlayN.keyboard;
 
@@ -11,6 +13,8 @@ import java.util.Stack;
 import playn.core.Game;
 import playn.core.ImageLayer;
 import playn.core.Keyboard;
+import playn.core.PlayN;
+import playn.core.gl.GLContext;
 
 import com.britton2000.orbiter.elements.Asteroid;
 import com.britton2000.orbiter.elements.Element;
@@ -24,52 +28,87 @@ public class OrbiterMain implements Game, Keyboard.Listener {
 	ImageLayer bglayer2;
 
 	float frameSwitch;
-	static boolean right, left, up, down, g;
-	boolean space, f, startpos, fireBullet, launchAsteroid, fire, smokeon;
-	public final static int canvasWidth = 1280, canvasHeight = 720;
-	private Ship ship;
+	static boolean right, left, up, down, space, g, enter, escape, pause = false, initiateObjects = false;
+	boolean f, startpos, fireBullet, launchAsteroid, fire, smokeon, b, a;
+	static boolean reset;
+	public static float screenWidth, screenHeight, canvasWidth, canvasHeight, imageSize;
+	public static Ship ship;
+	// private ScoreText scoreText;
 	private Background background;
 	private GUI gui;
-	private Menu buttons;
-	private final ArrayList<ElementInterface> elements = new ArrayList<ElementInterface>();
+	private Menu menu;
+	private ArrayList<ElementInterface> elements = new ArrayList<ElementInterface>();
 	public static Stack<Element> elementSpawnQueue = new Stack<Element>();
-	boolean b, a;
-	int launchRate, smokeRate, gemRate, enemyRate, toggleRate;
-	public static int imageSize = 5;
-	static int level = 1;
+	int asteroidSpawnRate, smokeRate, gemSpawnRate, enemyRate, toggleRate, scoreAdd, pauseToggleRate;
+	static int initiateObjectsNumber = 0, score, level = 0;
 
 	@Override
 	public void init() {
+		screenWidth = graphics().screenWidth();
+		screenHeight = graphics().screenHeight();
+		if ((screenWidth / 320) > (screenHeight / 180)) {
+			imageSize = screenHeight / 180;
+			canvasWidth = imageSize * 320;
+			canvasHeight = imageSize * 180;
+		}
+		if ((screenWidth / 320) < (screenHeight / 180)) {
+			imageSize = screenWidth / 320;
+			canvasWidth = imageSize * 320;
+			canvasHeight = imageSize * 180;
+		}
 		keyboard().setListener(this);
-		graphics().setSize(canvasWidth, canvasHeight);
+		// graphics().setSize((int)canvasWidth, (int)canvasHeight);
+		PlayN.graphics().ctx().setTextureFilter(GLContext.Filter.NEAREST, GLContext.Filter.NEAREST);
 		background = new Background(canvasWidth, canvasHeight, graphics().rootLayer());
-		if (level == 1) {
-			ship = new Ship(canvasWidth, canvasHeight, graphics().rootLayer());
-
-		}
-		if (level == 0) {
-			buttons = new Menu(canvasWidth, canvasHeight, graphics().rootLayer());
-		}
-
 		gui = new GUI(graphics().rootLayer());
+		ship = new Ship(canvasWidth, canvasHeight, graphics().rootLayer());
+		menu = new Menu(canvasWidth, canvasHeight, graphics().rootLayer());
 	}
 
 	@Override
 	public void update(float delta) {
-		if (level == 1) {
+		if (reset == true) {
+			reset();
+		}
+		if (pauseToggleRate < 6) {
+			pauseToggleRate += 1;
+		}
+		if (escape && pauseToggleRate > 5 && level == 1) {
+			pauseToggleRate = 0;
+			if (pause == false) {
+				pause = true;
+			} else if (pause == true) {
+				pause = false;
+			}
+		}
+
+		if (level == 0 || pause) {
+			menu.update(delta);
+			gui.update(delta);
+		} else if (level == 1) {
+
+			processElements(delta);
 			ship.update(delta);
+			gui.update(delta);
+			background.update(delta);
+			menu.update(delta);
+
 			if (space) {
 				fireBullet(true);
+			} else {
+				// recharge gun
 			}
-			launchRate += 1;
-			if (launchRate > 150) {
+
+			// spawn asteroid
+			asteroidSpawnRate += 1;
+			if (asteroidSpawnRate > 100) {
 				launchAsteroid(true);
-				launchRate = 0;
+				asteroidSpawnRate = 0;
 			}
-			gemRate += 1;
-			if (gemRate > 250) {
+			gemSpawnRate += 0;
+			if (gemSpawnRate > 250) {
 				launchGem(true);
-				gemRate = 0;
+				gemSpawnRate = 0;
 			}
 			smokeRate = 0;
 			if (smokeon == true) {
@@ -78,13 +117,14 @@ public class OrbiterMain implements Game, Keyboard.Listener {
 					smokeRate = 0;
 				}
 			}
-
 			enemyRate += 1;
 			if (enemyRate > 500) {
 				launchEnemy(true);
 				enemyRate = 0;
 			}
-			toggleRate += 1;
+			if (toggleRate < 6) {
+				toggleRate += 1;
+			}
 			if (f && toggleRate > 5) {
 				toggleRate = 0;
 				if (smokeon == false) {
@@ -100,37 +140,93 @@ public class OrbiterMain implements Game, Keyboard.Listener {
 					ship.gunType = 1;
 				}
 			}
-			processElements(delta);
-			background.update(delta);
 		}
+	}
+
+	public void reset() {
+		if (reset == true) {
+			reset = false;
+		}
+		if (ship != null) {
+			ship.clear();
+		}
+		ship = new Ship(canvasWidth, canvasHeight, graphics().rootLayer());
+
+		if (elements != null) {
+			for (Iterator<ElementInterface> it = elements.iterator(); it.hasNext();) {
+				ElementInterface e = it.next();
+				e.clear();
+				it.remove();
+
+			}
+		}
+		elements = new ArrayList<ElementInterface>();
+
+		if (background != null) {
+			background.clear();
+		}
+		background = new Background(canvasWidth, canvasHeight, graphics().rootLayer());
+
+		if (gui != null) {
+			gui.clear();
+		}
+		gui = new GUI(graphics().rootLayer());
 	}
 
 	@Override
 	public void paint(float alpha) {
-		if (1 == level) {
-
-			ship.render(alpha);
-			paintElements(alpha);
-		}
 		background.render(alpha);
-		gui.render(alpha);
+		if (level == 0) {
+			menu.render(alpha);
+		}
+		if (level == 1) {
+			paintElements(alpha);
+			ship.render(alpha);
+			gui.render(alpha);
+			menu.render(alpha);
+		}
+
 	}
 
 	private void processElements(float delta) {
 		if (elements != null) {
+
 			for (Iterator<ElementInterface> it = elements.iterator(); it.hasNext();) {
 				ElementInterface e = it.next();
 				e.update(delta);
-				if (e.getY2() < 0 || e.getY() > canvasHeight) {
+
+				if (checkCollisions(e)) {
+					e.processCollisions(delta);
+				}
+
+				// check ship collision
+				if (ship.hasCollision(e)) {
+					ship.processCollisions(delta);
+				}
+			}
+
+			// now process collisions
+			for (Iterator<ElementInterface> it = elements.iterator(); it.hasNext();) {
+				ElementInterface e = it.next();
+
+				if (e.getLayer().destroyed()) {
+					// no op when already destroyed
+				} else if (e.getY2() < 0 || e.getY() > canvasHeight) {
 					e.clear();
 					it.remove();
-				} else {
-					if (checkCollisions(e)) {
-						e.processCollisions(delta);
-					}
+				} else if (e.toRemove()) {
+					e.clear();
+					it.remove();
 				}
 
 			}
+
+			if (ship.toRemove()) {
+				// game over!!!
+				level = 0;
+				reset();
+			}
+
 		}
 
 		while (!OrbiterMain.elementSpawnQueue.isEmpty()) {
@@ -146,7 +242,9 @@ public class OrbiterMain implements Game, Keyboard.Listener {
 			}
 		}
 		if (ship != null) {
-			// collide = element.hasCollision(ship);
+
+			// ship collisions
+			collide = element.hasCollision(ship);
 		}
 
 		return collide;
@@ -157,20 +255,30 @@ public class OrbiterMain implements Game, Keyboard.Listener {
 		return 25;
 	}
 
+	@SuppressWarnings("incomplete-switch")
 	@Override
 	public void onKeyDown(Keyboard.Event event) {
 
 		switch (event.key()) {
+
 		case A:
+		case LEFT:
+		case DPAD_LEFT:
 			left = true;
 			break;
 		case D:
+		case RIGHT:
+		case DPAD_RIGHT:
 			right = true;
 			break;
 		case W:
+		case UP:
+		case DPAD_UP:
 			up = true;
 			break;
 		case S:
+		case DOWN:
+		case DPAD_DOWN:
 			down = true;
 			break;
 		case SPACE:
@@ -182,8 +290,14 @@ public class OrbiterMain implements Game, Keyboard.Listener {
 		case G:
 			g = true;
 			break;
-		}
+		case ENTER:
+			enter = true;
+			break;
+		case ESCAPE:
+			escape = true;
+			break;
 
+		}
 	}
 
 	@Override
@@ -206,6 +320,17 @@ public class OrbiterMain implements Game, Keyboard.Listener {
 			break;
 		case S:
 			down = false;
+		case LEFT:
+			left = false;
+			break;
+		case RIGHT:
+			right = false;
+			break;
+		case UP:
+			up = false;
+			break;
+		case DOWN:
+			down = false;
 			break;
 		case SPACE:
 			space = false;
@@ -215,6 +340,12 @@ public class OrbiterMain implements Game, Keyboard.Listener {
 			break;
 		case G:
 			g = false;
+			break;
+		case ENTER:
+			enter = false;
+			break;
+		case ESCAPE:
+			escape = false;
 			break;
 		}
 	}

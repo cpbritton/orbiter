@@ -4,16 +4,7 @@
         <wb-resource deploy-path="/" source-path="/target/m2e-wtp/web-resources"/>
         <wb-resource deploy-path="/" source-path="/src/main/webapp" tag="defaultRootSource"/>
         <wb-resource deploy-path="/WEB-INF/classes" source-path="/src/main/java"/>
-        <dependent-module archiveName="orbiter-core-0.0.1-SNAPSHOT.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/orbiter-core/orbiter-core">
-            <dependency-type>uses</dependency-type>
-        </dependent-module>
-        <dependent-module archiveName="playn-core-1.4-SNAPSHOT.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/playn-core/playn-core">
-            <dependency-type>uses</dependency-type>
-        </dependent-module>
-        <dependent-module archiveName="playn-html-1.4-SNAPSHOT.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/playn-html/playn-html">
-            <dependency-type>uses</dependency-type>
-        </dependent-module>
-        <dependent-module archiveName="playn-webgl-1.4-SNAPSHOT.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/playn-webgl/playn-webgl">
+        <dependent-module archiveName="orbiter-core-0.0.1.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/orbiter-core/orbiter-core">
             <dependency-type>uses</dependency-type>
         </dependent-module>
         <property name="context-root" value="orbiter-html"/>

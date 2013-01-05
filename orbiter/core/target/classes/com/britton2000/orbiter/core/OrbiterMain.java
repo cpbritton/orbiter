@@ -57,7 +57,7 @@ public class OrbiterMain implements Game, Keyboard.Listener {
 			canvasHeight = imageSize * 180;
 		}
 		keyboard().setListener(this);
-		//graphics().setSize((int)canvasWidth, (int)canvasHeight);
+		// graphics().setSize((int)canvasWidth, (int)canvasHeight);
 		PlayN.graphics().ctx().setTextureFilter(GLContext.Filter.NEAREST, GLContext.Filter.NEAREST);
 		background = new Background(canvasWidth, canvasHeight, graphics().rootLayer());
 		gui = new GUI(graphics().rootLayer());
@@ -81,8 +81,7 @@ public class OrbiterMain implements Game, Keyboard.Listener {
 				pause = false;
 			}
 		}
-		
-		
+
 		if (level == 0 || pause) {
 			menu.update(delta);
 			gui.update(delta);
@@ -93,14 +92,14 @@ public class OrbiterMain implements Game, Keyboard.Listener {
 			gui.update(delta);
 			background.update(delta);
 			menu.update(delta);
-			
+
 			if (space) {
 				fireBullet(true);
-			}else{
+			} else {
 				// recharge gun
 			}
-			
-			//spawn asteroid
+
+			// spawn asteroid
 			asteroidSpawnRate += 1;
 			if (asteroidSpawnRate > 100) {
 				launchAsteroid(true);
@@ -143,7 +142,7 @@ public class OrbiterMain implements Game, Keyboard.Listener {
 			}
 		}
 	}
-	
+
 	public void reset() {
 		if (reset == true) {
 			reset = false;
@@ -152,23 +151,23 @@ public class OrbiterMain implements Game, Keyboard.Listener {
 			ship.clear();
 		}
 		ship = new Ship(canvasWidth, canvasHeight, graphics().rootLayer());
-		
+
 		if (elements != null) {
 			for (Iterator<ElementInterface> it = elements.iterator(); it.hasNext();) {
-					ElementInterface e = it.next();					
+				ElementInterface e = it.next();
 				e.clear();
 				it.remove();
-					
+
 			}
 		}
 		elements = new ArrayList<ElementInterface>();
-		
+
 		if (background != null) {
 			background.clear();
 		}
 		background = new Background(canvasWidth, canvasHeight, graphics().rootLayer());
-		
-		if (gui !=null) {
+
+		if (gui != null) {
 			gui.clear();
 		}
 		gui = new GUI(graphics().rootLayer());
@@ -187,51 +186,47 @@ public class OrbiterMain implements Game, Keyboard.Listener {
 			menu.render(alpha);
 		}
 
-		
 	}
 
 	private void processElements(float delta) {
 		if (elements != null) {
-					
-			for (Iterator<ElementInterface> it = elements.iterator(); it
-					.hasNext();) {
+
+			for (Iterator<ElementInterface> it = elements.iterator(); it.hasNext();) {
 				ElementInterface e = it.next();
 				e.update(delta);
 
 				if (checkCollisions(e)) {
 					e.processCollisions(delta);
 				}
-				
-				//check ship collision
+
+				// check ship collision
 				if (ship.hasCollision(e)) {
 					ship.processCollisions(delta);
 				}
 			}
-			
-			
+
 			// now process collisions
-			for (Iterator<ElementInterface> it = elements.iterator(); it
-					.hasNext();) {
+			for (Iterator<ElementInterface> it = elements.iterator(); it.hasNext();) {
 				ElementInterface e = it.next();
-								
-				if (e.getLayer().destroyed() ){
-					//no op when already destroyed
-				}else if (e.getY2() < 0 || e.getY() > canvasHeight){
-				  e.clear();
-				  it.remove();
-				} else if( e.toRemove()) {
+
+				if (e.getLayer().destroyed()) {
+					// no op when already destroyed
+				} else if (e.getY2() < 0 || e.getY() > canvasHeight) {
+					e.clear();
+					it.remove();
+				} else if (e.toRemove()) {
 					e.clear();
 					it.remove();
 				}
-				
+
 			}
-			
-			if (ship.toRemove()){
-			//game over!!!
+
+			if (ship.toRemove()) {
+				// game over!!!
 				level = 0;
 				reset();
 			}
-			
+
 		}
 
 		while (!OrbiterMain.elementSpawnQueue.isEmpty()) {
@@ -260,32 +255,30 @@ public class OrbiterMain implements Game, Keyboard.Listener {
 		return 25;
 	}
 
+	@SuppressWarnings("incomplete-switch")
 	@Override
 	public void onKeyDown(Keyboard.Event event) {
 
 		switch (event.key()) {
+
 		case A:
+		case LEFT:
+		case DPAD_LEFT:
 			left = true;
 			break;
 		case D:
+		case RIGHT:
+		case DPAD_RIGHT:
 			right = true;
 			break;
 		case W:
+		case UP:
+		case DPAD_UP:
 			up = true;
 			break;
 		case S:
-			down = true;
-			break;
-		case LEFT:
-			left = true;
-			break;
-		case RIGHT:
-			right = true;
-			break;
-		case UP:
-			up = true;
-			break;
 		case DOWN:
+		case DPAD_DOWN:
 			down = true;
 			break;
 		case SPACE:
@@ -303,6 +296,7 @@ public class OrbiterMain implements Game, Keyboard.Listener {
 		case ESCAPE:
 			escape = true;
 			break;
+
 		}
 	}
 
@@ -375,19 +369,16 @@ public class OrbiterMain implements Game, Keyboard.Listener {
 	}
 
 	private void launchAsteroid(boolean r) {
-		Asteroid a = new Asteroid(canvasWidth, canvasHeight, graphics()
-				.rootLayer());
+		Asteroid a = new Asteroid(canvasWidth, canvasHeight, graphics().rootLayer());
 
-		a.setPosition((int) Math.round((Math.random() * canvasWidth)),
-				(int) (0 - a.getLayer().scaledHeight()));
+		a.setPosition((int) Math.round((Math.random() * canvasWidth)), (int) (0 - a.getLayer().scaledHeight()));
 		elements.add(a);
 	}
 
 	private void launchGem(boolean r) {
 		Gem g = new Gem(canvasWidth, canvasHeight, graphics().rootLayer());
 
-		g.setPosition((int) Math.round((Math.random() * canvasWidth)),
-				(int) (0 - g.getLayer().scaledHeight()));
+		g.setPosition((int) Math.round((Math.random() * canvasWidth)), (int) (0 - g.getLayer().scaledHeight()));
 		elements.add(g);
 	}
 
@@ -405,9 +396,7 @@ public class OrbiterMain implements Game, Keyboard.Listener {
 			e = new EnemyShip(graphics().rootLayer());
 		}
 
-		e.setPosition(
-				(int) Math.round((Math.random() * OrbiterMain.canvasWidth)),
-				(int) (0 - e.getLayer().scaledHeight()));
+		e.setPosition((int) Math.round((Math.random() * OrbiterMain.canvasWidth)), (int) (0 - e.getLayer().scaledHeight()));
 		elements.add(e);
 	}
 }

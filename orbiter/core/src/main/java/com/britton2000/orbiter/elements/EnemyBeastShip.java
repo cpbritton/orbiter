@@ -1,5 +1,7 @@
 package com.britton2000.orbiter.elements;
 
+//Max Britton hi
+
 import playn.core.GroupLayer;
 
 import com.britton2000.orbiter.core.OrbiterMain;
@@ -8,9 +10,11 @@ import com.britton2000.orbiter.core.Ship;
 public class EnemyBeastShip extends EnemyShip {
 
 	private final String imageName = "images/EnemyBeastShip.png";
+	int damage = 150;
 
 	public EnemyBeastShip(GroupLayer parentLayer) {
 		super(parentLayer);
+		layer.setDepth(3);
 	}
 
 	@Override
@@ -18,10 +22,10 @@ public class EnemyBeastShip extends EnemyShip {
 		Bullet b = null;
 		attack += 1;
 		if (y < 20) {
-			y += 10;
+			y += 2 * OrbiterMain.imageSize;
 		}
 		if (attack > 100 && attackNumber < 3) {
-			y += 10;
+			y += 2 * OrbiterMain.imageSize;
 			b = fireMainGun();
 			if (y > OrbiterMain.canvasHeight / 2) {
 				attack = 0;
@@ -31,15 +35,15 @@ public class EnemyBeastShip extends EnemyShip {
 		if (attack > 100 && attackNumber >= 3) {
 			y += 15;
 			b = fireMainGun();
-			if (Ship.x > x) {
-				x += 10;
+			if (OrbiterMain.ship.x > x) {
+				x += 2 * OrbiterMain.imageSize;
 			}
-			if (Ship.x < x) {
-				x -= 10;
+			if (OrbiterMain.ship.x < x) {
+				x -= 2 * OrbiterMain.imageSize;
 			}
 		}
 		if (attack < 100 && y >= 20) {
-			y -= 10;
+			y -= 2 * OrbiterMain.imageSize;
 		}
 		if (attack < 50 && y < 20) {
 			b = fireMainGun();
@@ -47,13 +51,13 @@ public class EnemyBeastShip extends EnemyShip {
 		if (y >= OrbiterMain.canvasHeight) {
 			attack = 0;
 		}
-		if (Ship.x == x) {
+		if (OrbiterMain.ship.x == x) {
 			dodge += 1;
 			if (dodge < 25) {
-				x += 10;
+				x += 2 * OrbiterMain.imageSize;
 			}
 			if (dodge >= 25) {
-				x -= 10;
+				x -= 2 * OrbiterMain.imageSize;
 			}
 			if (dodge >= 50) {
 				dodge = 0;
@@ -68,5 +72,36 @@ public class EnemyBeastShip extends EnemyShip {
 	@Override
 	public String getImage() {
 		return imageName;
+	}
+	
+	@Override
+	public void processCollisions(float delta) {
+		if (!collision)
+			return;
+
+		if (collidingElement instanceof Bullet) {
+			damage -= 10;
+		}
+		
+		if (collidingElement instanceof TracerBullet) {
+			damage -= 20;
+		}
+
+		if (collidingElement instanceof Asteroid) {
+			damage -= 100;
+		}
+			
+		if (collidingElement instanceof Ship) {
+				damage -= 200;
+		}
+		
+		if (damage < 0) {
+			_remove = true;
+		}
+
+		
+
+		resetCollision();
+
 	}
 }

@@ -1,5 +1,7 @@
 package com.britton2000.orbiter.elements;
 
+//Max Britton hi
+
 import static playn.core.PlayN.assets;
 import static playn.core.PlayN.graphics;
 import static playn.core.PlayN.log;
@@ -17,20 +19,21 @@ public class Bullet extends Element {
 
 	private final String imageName = "images/Bullet.png";
 
-	public Bullet(final GroupLayer parentLayer, Element creator, boolean direction) {
+	public Bullet(final GroupLayer parentLayer, Element creator,
+			boolean direction) {
 		bulletDirection = direction;
 		image = assets().getImage(this.getImage());
 		layer = graphics().createImageLayer(image);
 		layer.setScale(OrbiterMain.imageSize, OrbiterMain.imageSize);
-		height = image.height();
-		width = image.width();
+		layer.setDepth(2);
+		height = (int) image.height();
+		width = (int) image.width();
 		this.creator = creator;
 		image.addCallback(new ResourceCallback<Image>() {
 			@Override
 			public void done(Image image) {
 				parentLayer.add(layer);
 			}
-
 			@Override
 			public void error(Throwable err) {
 				log().error("Error loading image!", err);
@@ -41,15 +44,24 @@ public class Bullet extends Element {
 	@Override
 	public void update(float delta) {
 		if (bulletDirection) {
-			y -= 15;
+			y -= 6 * OrbiterMain.imageSize;
 		} else {
-			y += 15;
+			y += 6 * OrbiterMain.imageSize;
 		}
 	}
 
 	@Override
 	public String getImage() {
 		return imageName;
+	}
+
+	@Override
+	public void processCollisions(float delta) {
+		
+		if (!(collidingElement instanceof Bullet) || !(collidingElement instanceof Explosion)) {
+			_remove = true;
+		}
+		resetCollision();
 	}
 
 }

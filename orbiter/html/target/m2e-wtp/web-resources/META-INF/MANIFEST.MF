@@ -1,5 +1,5 @@
 Manifest-Version: 1.0
-Built-By: Max Britton
-Build-Jdk: 1.6.0_30
+Built-By: cbritton
+Build-Jdk: 1.6.0_37
 Created-By: Maven Integration for Eclipse
 

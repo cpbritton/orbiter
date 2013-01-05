@@ -1,5 +1,11 @@
 package com.britton2000.orbiter.elements;
 
+//Max Britton hi
+
+import static playn.core.PlayN.graphics;
+
+import com.britton2000.orbiter.core.OrbiterMain;
+
 import playn.core.ImageLayer;
 import playn.core.Layer;
 import pythagoras.f.Point;
@@ -7,14 +13,23 @@ import pythagoras.f.Point;
 public class Element implements ElementInterface {
 	protected int y, x;
 	private int y2, x2;
-	public int width, height;
+	protected int width, height;
+	int damage;
 	protected ImageLayer layer;
 	protected String imageName;
-	private boolean collision = false;
+	protected boolean collision = false;
 	protected boolean _explodes = true;
 	protected boolean _collides = true;
+	protected boolean _remove = false;
 	protected ElementInterface creator = null;
 	protected ElementInterface collidingElement;
+
+	/**
+	 * 
+	 */
+	protected Element() {
+		super();
+	}
 
 	/*
 	 * (non-Javadoc)
@@ -103,10 +118,10 @@ public class Element implements ElementInterface {
 	 * @see Orbiter.elements.ElementInterface#setPosition(int, int)
 	 */
 	@Override
-	public void setPosition(int x, int y) {
+	public void setPosition(int bx, int by) {
 
-		this.x = x;
-		this.y = y;
+		this.x = bx;
+		this.y = by;
 	}
 
 	@Override
@@ -134,9 +149,15 @@ public class Element implements ElementInterface {
 	}
 
 	@Override
-	public boolean hasCollision(ElementInterface e) {
+	public boolean toRemove() {
+		return _remove;
+	}
 
-		if (e == null || e.getLayer() == null || e == this || collision || !collides() || creatorCheck(e)) {
+	@Override
+	public boolean hasCollision(ElementInterface e) {
+		
+		if (e == null || e.getLayer() == null || e.getLayer().image() == null || e.getLayer().destroyed() || e == this || collision
+				|| !collides() || creatorCheck(e)) {
 			return collision;
 		}
 
@@ -155,8 +176,15 @@ public class Element implements ElementInterface {
 			collision = true;
 		}
 
-		if (collision) {
+		if (collision && !(e instanceof Bullet) && !(e instanceof Explosion)) {
 			collidingElement = e;
+			e.setCollision(true);
+			e.setCollidingElement(this);
+			
+			//create boom
+			Explosion boom = new Explosion(OrbiterMain.canvasWidth, OrbiterMain.canvasHeight, graphics().rootLayer());
+			OrbiterMain.elementSpawnQueue.push(boom);
+			boom.setPosition(e.getX(), e.getY());
 		}
 		return collision;
 	}
@@ -166,13 +194,17 @@ public class Element implements ElementInterface {
 		collidingElement = null;
 	}
 
-	private boolean creatorCheck(ElementInterface e) {
-		if (e != null && e == creator) {
+	@Override
+	public boolean creatorCheck(ElementInterface e) {
+		if (e != null && (e == creator || this == e.getCreator())) {
 			return true;
+
 		}
+
 		return false;
 	}
 
+	@Override
 	public ElementInterface getCreator() {
 		return creator;
 	}
@@ -183,12 +215,25 @@ public class Element implements ElementInterface {
 
 	@Override
 	public void processCollisions(float delta) {
-
+		if (!collision)
+			return;
 	}
+	
+	
 
 	@Override
 	public ImageLayer getLayer() {
 		return layer;
+	}
+
+	@Override
+	public void setCollision(boolean collides) {
+		collision = collides;
+	}
+
+	@Override
+	public void setCollidingElement(ElementInterface element) {
+		collidingElement = element;		
 	}
 
 }

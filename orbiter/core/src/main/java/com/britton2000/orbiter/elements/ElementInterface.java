@@ -1,5 +1,7 @@
 package com.britton2000.orbiter.elements;
 
+//Max Britton hi
+
 import playn.core.ImageLayer;
 
 public interface ElementInterface {
@@ -51,9 +53,19 @@ public interface ElementInterface {
 	public abstract void setX(int x);
 
 	public abstract void setPosition(int x, int y);
+	
+	public abstract void setCollision(boolean collides);
+	
+	public abstract void setCollidingElement(ElementInterface element);
 
 	public abstract boolean hasCollision(ElementInterface element);
 
 	boolean collides();
+
+	public abstract boolean toRemove();
+
+	abstract boolean creatorCheck(ElementInterface e);
+
+	public abstract ElementInterface getCreator();
 
 }
