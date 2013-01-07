@@ -3,6 +3,8 @@ package com.britton2000.orbiter.ouya;
 import playn.android.GameActivity;
 import playn.core.PlayN;
 import tv.ouya.console.api.OuyaController;
+import tv.ouya.console.api.OuyaFacade;
+import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
 
@@ -18,7 +20,13 @@ public class OrbiterActivity extends GameActivity {
 	 * The current value is just a sample developer account. You should change
 	 * it.
 	 */
-	public static final String DEVELOPER_ID = "310a8f51-4d6e-4ae5-bda0-b93878e5f5d0";
+	public static final String DEVELOPER_ID = "5ae6e5d7-b7b2-4cfb-9daf-302ea33d6d29";
+	private OuyaFacade ouyaFacade = OuyaFacade.getInstance();
+
+	public void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		ouyaFacade.init(this, DEVELOPER_ID);
+	}
 
 	@Override
 	public void main() {
@@ -72,6 +80,7 @@ public class OrbiterActivity extends GameActivity {
 
 	@Override
 	public boolean onKeyUp(int keyCode, KeyEvent event) {
+		System.out.println("Key up: " + keyCode);
 		return super.onKeyUp(keyMapper(keyCode), event);
 	}
 
@@ -106,7 +115,7 @@ public class OrbiterActivity extends GameActivity {
 	public boolean onGenericMotionEvent(MotionEvent event) {
 		int odid = event.getDeviceId();
 		boolean handled = OuyaController.onGenericMotionEvent(event);
-		System.out.println("Motion Event: " + event.describeContents());
+		// System.out.println("Motion Event: " + event.describeContents());
 
 		OuyaController c = OuyaController.getControllerByDeviceId(event.getDeviceId());
 		if (c != null) {
