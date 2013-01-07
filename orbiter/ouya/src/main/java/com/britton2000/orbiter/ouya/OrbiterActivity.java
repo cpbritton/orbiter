@@ -5,6 +5,7 @@ import playn.core.PlayN;
 import tv.ouya.console.api.OuyaController;
 import tv.ouya.console.api.OuyaFacade;
 import android.os.Bundle;
+import android.view.InputDevice;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
 
@@ -74,14 +75,16 @@ public class OrbiterActivity extends GameActivity {
 
 	@Override
 	public boolean onKeyDown(int keyCode, KeyEvent event) {
+		boolean handled = OuyaController.onKeyDown(keyCode, event);
 		System.out.println("Key down: " + keyCode);
-		return super.onKeyDown(keyMapper(keyCode), event);
+		return handled || super.onKeyDown(keyMapper(keyCode), event);
 	}
 
 	@Override
 	public boolean onKeyUp(int keyCode, KeyEvent event) {
+		boolean handled = OuyaController.onKeyUp(keyCode, event);
 		System.out.println("Key up: " + keyCode);
-		return super.onKeyUp(keyMapper(keyCode), event);
+		return handled || super.onKeyUp(keyMapper(keyCode), event);
 	}
 
 	private int keyMapper(int keyCode) {
@@ -112,15 +115,56 @@ public class OrbiterActivity extends GameActivity {
 	// return getControllerView(event).onGenericMotionEvent(event);
 	// }
 
-	public boolean onGenericMotionEvent(MotionEvent event) {
-		int odid = event.getDeviceId();
-		boolean handled = OuyaController.onGenericMotionEvent(event);
-		// System.out.println("Motion Event: " + event.describeContents());
+	// public boolean onGenericMotionEvent(MotionEvent event) {
+	// int odid = event.getDeviceId();
+	// boolean handled = OuyaController.onGenericMotionEvent(event);
+	// // System.out.println("Motion Event: " + event.describeContents());
+	//
+	// OuyaController c =
+	// OuyaController.getControllerByDeviceId(event.getDeviceId());
+	// if (c != null) {
+	// }
+	//
+	// return handled || super.onGenericMotionEvent(event);
+	// }
 
-		OuyaController c = OuyaController.getControllerByDeviceId(event.getDeviceId());
-		if (c != null) {
+	@Override
+	public boolean onGenericMotionEvent(MotionEvent event) {
+
+		if ((event.getSource() & InputDevice.SOURCE_CLASS_JOYSTICK) == 1) {
+			float LS_X = event.getAxisValue(OuyaController.AXIS_LS_X);
+			float LS_Y = event.getAxisValue(OuyaController.AXIS_LS_Y);
+			if (LS_X < -0.2f) {
+				// left
+				dispatchKeyEvent(new KeyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_DPAD_LEFT));
+				dispatchKeyEvent(new KeyEvent(KeyEvent.ACTION_UP, KeyEvent.KEYCODE_DPAD_RIGHT));
+
+			} else if (LS_X > 0.2f) {
+				// right
+				dispatchKeyEvent(new KeyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_DPAD_RIGHT));
+				dispatchKeyEvent(new KeyEvent(KeyEvent.ACTION_UP, KeyEvent.KEYCODE_DPAD_LEFT));
+
+			} else {
+				// centered
+				dispatchKeyEvent(new KeyEvent(KeyEvent.ACTION_UP, KeyEvent.KEYCODE_DPAD_RIGHT));
+				dispatchKeyEvent(new KeyEvent(KeyEvent.ACTION_UP, KeyEvent.KEYCODE_DPAD_LEFT));
+			}
+
+			if (LS_Y < -0.2f) {
+				// down
+				dispatchKeyEvent(new KeyEvent(KeyEvent.ACTION_UP, KeyEvent.KEYCODE_DPAD_UP));
+				dispatchKeyEvent(new KeyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_DPAD_DOWN));
+			} else if (LS_Y > 0.2f) {
+				// up
+				dispatchKeyEvent(new KeyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_DPAD_UP));
+				dispatchKeyEvent(new KeyEvent(KeyEvent.ACTION_UP, KeyEvent.KEYCODE_DPAD_DOWN));
+			} else {
+				// centered
+				dispatchKeyEvent(new KeyEvent(KeyEvent.ACTION_UP, KeyEvent.KEYCODE_DPAD_UP));
+				dispatchKeyEvent(new KeyEvent(KeyEvent.ACTION_UP, KeyEvent.KEYCODE_DPAD_DOWN));
+			}
 		}
 
-		return handled || super.onGenericMotionEvent(event);
+		return super.onGenericMotionEvent(event);
 	}
 }
