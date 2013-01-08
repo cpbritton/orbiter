@@ -45,7 +45,7 @@ public class GUI {
 			pauseLayer.setDepth(100);
 			pauseLayer.setVisible(false);
 			
-			name = assets().getImage("images/gui/name.png");
+			name = assets().getImageSync("images/gui/name.png");
 			nameLayer = graphics().createImageLayer(name);
 			graphics().rootLayer().add(nameLayer);
 			nameLayer.setScale(OrbiterMain.imageSize, OrbiterMain.imageSize);

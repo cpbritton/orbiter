@@ -13,21 +13,21 @@ import playn.core.Pointer;
 
 public class Menu {
 	ImageLayer startLayer, helpLayer, nameLayer, logoLayer, menuBackgroundLayer;
-	ImageLayer pauseBackgroundLayer, backtogameLayer, optionsLayer, quitLayer;
+	ImageLayer pauseBackgroundLayer, backtogameLayer, optionsLayer, quitLayer, quitGameLayer;
 	Image start, logo, startSelected, help, helpSelected, name, button3, menuBackground, pauseBackground;
-	Image backtogame, backtogameSelected, options, optionsSelected, quit, quitSelected;
+	Image backtogame, backtogameSelected, options, optionsSelected, quit, quitSelected, quitGame, quitGameSelected;
 	GroupLayer menu, pauseMenu;
 
 	public static int buttonNum = 2;
 	int toggleRate = 0, buttonSelectionNumber = 0, buttonSelectionHighestNumber = 1, buttonToggleRate;
+	int pauseMenuToggleRate = 0, pauseMenuButtonSelectionNumber = 0, pauseMenuButtonSelectionHighestNumber = 2, pauseMenuButtonToggleRate;
+	int status;
 	private boolean currentVisible = false;
 
 	public Menu(float canvaswidth, float canvasheight, final GroupLayer parentLayer) {
 
 		menu = graphics().createGroupLayer();
 		menu.setVisible(false);
-		pauseMenu = graphics().createGroupLayer();
-		pauseMenu.setVisible(false);
 
 		start = assets().getImage("images/buttons/play.png");
 		startSelected = assets().getImage("images/buttons/playSelected.png");
@@ -63,6 +63,14 @@ public class Menu {
 		logoLayer.setVisible(false);
 		logoLayer.setDepth(100);
 		
+		quitGame = assets().getImage("images/buttons/quit.png");
+		quitGameSelected = assets().getImage("images/buttons/quitselected.png");
+		quitGameLayer = graphics().createImageLayer(quitGame);
+		quitGameLayer.setScale(OrbiterMain.imageSize, OrbiterMain.imageSize);
+		quitGameLayer.setTranslation(0, 0);
+		quitGameLayer.setVisible(false);
+		quitGameLayer.setDepth(100);
+		
 		menuBackground = assets().getImage("images/gui/menuBackground.png");
 		menuBackgroundLayer = graphics().createImageLayer(menuBackground);
 		menuBackgroundLayer.setScale(OrbiterMain.imageSize, OrbiterMain.imageSize);
@@ -74,65 +82,17 @@ public class Menu {
 		menu.add(startLayer);
 		menu.add(nameLayer);
 		menu.add(logoLayer);
+		menu.add(quitGameLayer);
 		menu.add(menuBackgroundLayer);
 		graphics().rootLayer().add(menu);
 		menu.setDepth(100);
-		
-		pauseBackground = assets().getImage("images/gui/pauseMenuBackground.png");
-		pauseBackgroundLayer = graphics().createImageLayer(pauseBackground);
-		pauseBackgroundLayer.setScale(OrbiterMain.imageSize, OrbiterMain.imageSize);
-		pauseBackgroundLayer.setTranslation((canvaswidth / 2) - ((OrbiterMain.imageSize * pauseBackground.width()) / 2), 
-				(canvasheight / 2) - ((OrbiterMain.imageSize * pauseBackground.height()) / 2));
-		pauseBackgroundLayer.setVisible(false);
-		pauseBackgroundLayer.setDepth(99);
-		
-		backtogame = assets().getImage("images/buttons/backtogame.png");
-		backtogameSelected = assets().getImage("images/buttons/backtogameselected.png");
-		backtogameLayer = graphics().createImageLayer(backtogame);
-		backtogameLayer.setScale(OrbiterMain.imageSize, OrbiterMain.imageSize);
-		backtogameLayer.setTranslation((canvaswidth / 2) - ((OrbiterMain.imageSize * pauseBackground.width()) / 2)
-				+ 13 * OrbiterMain.imageSize, 
-				(canvasheight / 2) - ((OrbiterMain.imageSize * pauseBackground.height()) / 2)
-				+ 22 * OrbiterMain.imageSize);
-		backtogameLayer.setVisible(false);
-		backtogameLayer.setDepth(99);
-		
-		options = assets().getImage("images/buttons/options.png");
-		optionsSelected = assets().getImage("images/buttons/optionsselected.png");
-		optionsLayer = graphics().createImageLayer(options);
-		optionsLayer.setScale(OrbiterMain.imageSize, OrbiterMain.imageSize);
-		optionsLayer.setTranslation((canvaswidth / 2) - ((OrbiterMain.imageSize * pauseBackground.width()) / 2)
-				+ 13 * OrbiterMain.imageSize, 
-				(canvasheight / 2) - ((OrbiterMain.imageSize * pauseBackground.height()) / 2)
-				+ 44 * OrbiterMain.imageSize);
-		optionsLayer.setVisible(false);
-		optionsLayer.setDepth(99);
-		
-		quit = assets().getImage("images/buttons/quit.png");
-		quitSelected = assets().getImage("images/buttons/quitselected.png");
-		quitLayer = graphics().createImageLayer(quit);
-		quitLayer.setScale(OrbiterMain.imageSize, OrbiterMain.imageSize);
-		quitLayer.setTranslation((canvaswidth / 2) - ((OrbiterMain.imageSize * pauseBackground.width()) / 2)
-				+ 82 * OrbiterMain.imageSize, 
-				(canvasheight / 2) - ((OrbiterMain.imageSize * pauseBackground.height()) / 2)
-				+ 44 * OrbiterMain.imageSize);
-		quitLayer.setVisible(false);
-		quitLayer.setDepth(99);
-		
-		pauseMenu.add(pauseBackgroundLayer);
-		pauseMenu.add(backtogameLayer);
-		pauseMenu.add(optionsLayer);
-		pauseMenu.add(quitLayer);
-		graphics().rootLayer().add(pauseMenu);
-		pauseMenu.setDepth(100);
 	}
 
 	public void render(float alpha) {
 		paint(alpha);
 	}
 	
-	private void menuVisible(boolean visible){
-		
+	private void menuVisible(boolean visible) {
 		if (currentVisible == visible){
 			return;
 		}
@@ -142,57 +102,46 @@ public class Menu {
 		helpLayer.setVisible(visible);
 		nameLayer.setVisible(visible);
 		logoLayer.setVisible(visible);
+		quitGameLayer.setVisible(visible);
 		menuBackgroundLayer.setVisible(visible);
-		
 	}
 
 	public void update(float delta) {
 
 		startLayer.addListener(new Pointer.Adapter() {
 		      public void onPointerStart(Pointer.Event event) {
-		        OrbiterMain.level = 1;
+		    	  startLayer.setImage(startSelected);
 		      }
-		    });
-		
+		      public void onPointerEnd(Pointer.Event event) {
+		    	  startLayer.setImage(start);
+		    	  OrbiterMain.level = 1;
+		      }
+		});
 		helpLayer.addListener(new Pointer.Adapter() {
 		      public void onPointerStart(Pointer.Event event) {
-		        OrbiterMain.level = 1;
+		    	  helpLayer.setImage(helpSelected);
 		      }
-		    });
-		
-		backtogameLayer.addListener(new Pointer.Adapter() {
+		      public void onPointerEnd(Pointer.Event event) {
+		    	  helpLayer.setImage(help);
+		    	  OrbiterMain.level = 1;
+		      }
+		});
+		quitGameLayer.addListener(new Pointer.Adapter() {
 		      public void onPointerStart(Pointer.Event event) {
-		    	   OrbiterMain.pause = false;
+		    	  quitGameLayer.setImage(quitGameSelected);
 		      }
-		    });
-		quitLayer.addListener(new Pointer.Adapter() {
-		      public void onPointerStart(Pointer.Event event) {
-		    	  OrbiterMain.pause = false;
-		    	  OrbiterMain.level = 0;
-		    	  OrbiterMain.reset = true;
+		      public void onPointerEnd(Pointer.Event event) {
+		    	  quitGameLayer.setImage(quitGame);
+		    	  System.exit(status);
 		      }
-		    });
+		});
 		
-		if (OrbiterMain.pause) {
-			pauseBackgroundLayer.setVisible(true);
-			backtogameLayer.setVisible(true);
-			optionsLayer.setVisible(true);
-			quitLayer.setVisible(true);
-			pauseMenu.setVisible(true);
-		} else {
-			pauseMenu.setVisible(false);
-			backtogameLayer.setVisible(false);
-			optionsLayer.setVisible(false);
-			quitLayer.setVisible(false);
-			pauseBackgroundLayer.setVisible(false);
-		}
 		if (OrbiterMain.level == 1) {
 			menuVisible(false);
 		}else if (OrbiterMain.level == 0) {
 			menuVisible(true);
-			
+			quitGameLayer.setTranslation(0, 0);
 			if (mouse().hasMouse() == false) {
-
 			if (buttonToggleRate < 6) {
 				buttonToggleRate += 1;
 			}
@@ -240,6 +189,7 @@ public class Menu {
 			helpLayer.setTranslation((OrbiterMain.canvasWidth / 2) - ((OrbiterMain.imageSize * helpLayer.width()) / 2),
 					(OrbiterMain.canvasHeight * 3 / 4) - ((OrbiterMain.imageSize * helpLayer.height()) / 2));
 			}
+			
 		}
 	}
 

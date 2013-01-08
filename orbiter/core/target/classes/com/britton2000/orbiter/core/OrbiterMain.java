@@ -38,6 +38,8 @@ public class OrbiterMain implements Game, Keyboard.Listener {
 	private Background background;
 	private GUI gui;
 	private Menu menu;
+	private PauseMenu pauseMenu;
+	private OptionsMenu optionsMenu;
 	private ArrayList<ElementInterface> elements = new ArrayList<ElementInterface>();
 	public static Stack<Element> elementSpawnQueue = new Stack<Element>();
 	int asteroidSpawnRate, smokeRate, gemSpawnRate, enemyRate, toggleRate, scoreAdd, pauseToggleRate;
@@ -52,7 +54,7 @@ public class OrbiterMain implements Game, Keyboard.Listener {
 		if (graphics().width() != canvasWidth && graphics().width() > 0) {
 			canvasWidth = graphics().width();
 		}
-
+		imageSize = canvasWidth / 320;
 		if ((canvasWidth / 320) > (canvasHeight / 180)) {
 			imageSize = canvasHeight / 180;
 			canvasWidth = imageSize * 320;
@@ -63,15 +65,14 @@ public class OrbiterMain implements Game, Keyboard.Listener {
 			canvasWidth = imageSize * 320;
 			canvasHeight = imageSize * 180;
 		}
-
 		keyboard().setListener(this);
-
 		PlayN.graphics().ctx().setTextureFilter(GLContext.Filter.NEAREST, GLContext.Filter.NEAREST);
 		background = new Background(canvasWidth, canvasHeight, graphics().rootLayer());
 		gui = new GUI(graphics().rootLayer());
 		ship = new Ship(canvasWidth, canvasHeight, graphics().rootLayer());
 		menu = new Menu(canvasWidth, canvasHeight, graphics().rootLayer());
-
+		pauseMenu = new PauseMenu(canvasWidth, canvasHeight, graphics().rootLayer());
+		optionsMenu = new OptionsMenu(canvasWidth, canvasHeight, graphics().rootLayer());
 	}
 
 	@Override
@@ -90,24 +91,24 @@ public class OrbiterMain implements Game, Keyboard.Listener {
 				pause = false;
 			}
 		}
-
 		if (level == 0 || pause) {
 			menu.update(delta);
 			gui.update(delta);
+			pauseMenu.update(delta);
+			optionsMenu.update(delta);
 		} else if (level == 1) {
-
 			processElements(delta);
 			ship.update(delta);
 			gui.update(delta);
 			background.update(delta);
 			menu.update(delta);
-
+			pauseMenu.update(delta);
+			optionsMenu.update(delta);
 			if (space) {
 				fireBullet(true);
 			} else {
 				// recharge gun
 			}
-
 			// spawn asteroid
 			asteroidSpawnRate += 1;
 			if (asteroidSpawnRate > 100) {
@@ -160,22 +161,18 @@ public class OrbiterMain implements Game, Keyboard.Listener {
 			ship.clear();
 		}
 		ship = new Ship(canvasWidth, canvasHeight, graphics().rootLayer());
-
 		if (elements != null) {
 			for (Iterator<ElementInterface> it = elements.iterator(); it.hasNext();) {
 				ElementInterface e = it.next();
 				e.clear();
 				it.remove();
-
 			}
 		}
 		elements = new ArrayList<ElementInterface>();
-
 		if (background != null) {
 			background.clear();
 		}
 		background = new Background(canvasWidth, canvasHeight, graphics().rootLayer());
-
 		if (gui != null) {
 			gui.clear();
 		}
@@ -194,7 +191,6 @@ public class OrbiterMain implements Game, Keyboard.Listener {
 			gui.render(alpha);
 			menu.render(alpha);
 		}
-
 	}
 
 	private void processElements(float delta) {
@@ -203,11 +199,9 @@ public class OrbiterMain implements Game, Keyboard.Listener {
 			for (Iterator<ElementInterface> it = elements.iterator(); it.hasNext();) {
 				ElementInterface e = it.next();
 				e.update(delta);
-
 				if (checkCollisions(e)) {
 					e.processCollisions(delta);
 				}
-
 				// check ship collision
 				if (ship.hasCollision(e)) {
 					ship.processCollisions(delta);
@@ -217,7 +211,6 @@ public class OrbiterMain implements Game, Keyboard.Listener {
 			// now process collisions
 			for (Iterator<ElementInterface> it = elements.iterator(); it.hasNext();) {
 				ElementInterface e = it.next();
-
 				if (e.getLayer().destroyed()) {
 					// no op when already destroyed
 				} else if (e.getY2() < 0 || e.getY() > canvasHeight) {
@@ -227,17 +220,13 @@ public class OrbiterMain implements Game, Keyboard.Listener {
 					e.clear();
 					it.remove();
 				}
-
 			}
-
 			if (ship.toRemove()) {
 				// game over!!!
 				level = 0;
 				reset();
 			}
-
 		}
-
 		while (!OrbiterMain.elementSpawnQueue.isEmpty()) {
 			elements.add(OrbiterMain.elementSpawnQueue.pop());
 		}
@@ -251,11 +240,9 @@ public class OrbiterMain implements Game, Keyboard.Listener {
 			}
 		}
 		if (ship != null) {
-
 			// ship collisions
 			collide = element.hasCollision(ship);
 		}
-
 		return collide;
 	}
 
@@ -305,7 +292,6 @@ public class OrbiterMain implements Game, Keyboard.Listener {
 		case ESCAPE:
 			escape = true;
 			break;
-
 		}
 	}
 
@@ -319,28 +305,24 @@ public class OrbiterMain implements Game, Keyboard.Listener {
 
 		switch (event.key()) {
 		case A:
+		case LEFT:
+		case DPAD_LEFT:
 			left = false;
 			break;
 		case D:
+		case RIGHT:
+		case DPAD_RIGHT:
 			right = false;
 			break;
 		case W:
+		case UP:
+		case DPAD_UP:
 			up = false;
 			break;
 		case S:
-			down = false;
-		case LEFT:
-			left = false;
-			break;
-		case RIGHT:
-			right = false;
-			break;
-		case UP:
-			up = false;
-			break;
 		case DOWN:
+		case DPAD_DOWN:
 			down = false;
-			break;
 		case SPACE:
 			space = false;
 			break;
@@ -379,14 +361,12 @@ public class OrbiterMain implements Game, Keyboard.Listener {
 
 	private void launchAsteroid(boolean r) {
 		Asteroid a = new Asteroid(canvasWidth, canvasHeight, graphics().rootLayer());
-
 		a.setPosition((int) Math.round((Math.random() * canvasWidth)), (int) (0 - a.getLayer().scaledHeight()));
 		elements.add(a);
 	}
 
 	private void launchGem(boolean r) {
 		Gem g = new Gem(canvasWidth, canvasHeight, graphics().rootLayer());
-
 		g.setPosition((int) Math.round((Math.random() * canvasWidth)), (int) (0 - g.getLayer().scaledHeight()));
 		elements.add(g);
 	}
@@ -404,7 +384,6 @@ public class OrbiterMain implements Game, Keyboard.Listener {
 		} else {
 			e = new EnemyShip(graphics().rootLayer());
 		}
-
 		e.setPosition((int) Math.round((Math.random() * OrbiterMain.canvasWidth)), (int) (0 - e.getLayer().scaledHeight()));
 		elements.add(e);
 	}

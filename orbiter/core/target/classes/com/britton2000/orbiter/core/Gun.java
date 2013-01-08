@@ -37,7 +37,9 @@ public class Gun {
 				fireRate = 0;
 				Bullet b = null;
 				b = new Bullet(graphics().rootLayer(), parent, direction);
-				pew.play();
+				if (OptionsMenu.soundOptionOn == true) {
+					pew.play();
+				}
 				if (direction) {
 					GunChargeBar.charge -= 1;
 				}
@@ -51,7 +53,9 @@ public class Gun {
 				fireRate = 0;
 				Bullet b = null;
 				b = new TracerBullet(graphics().rootLayer(), parent, direction);
-				pew.play();
+				if (OptionsMenu.soundOptionOn == true) {
+					pew.play();
+				}
 				if (direction) {
 					GunChargeBar.charge -= 1;
 				}
@@ -64,7 +68,9 @@ public class Gun {
 				fireRate = 0;
 				Bullet b = null;
 				b = new Bullet(graphics().rootLayer(), parent, direction);
-				pew.play(); 
+				if (OptionsMenu.soundOptionOn == true) {
+					pew.play();
+				}
 				if (direction) {
 					GunChargeBar.charge -= 1;
 				}
@@ -77,7 +83,9 @@ public class Gun {
 				fireRate = 0;
 				Bullet b = null;
 				b = new TracerBullet(graphics().rootLayer(), parent, direction);
-				pew.play();
+				if (OptionsMenu.soundOptionOn == true) {
+					pew.play();
+				}
 				b.setPosition(Math.round(bx), Math.round(by));
 				if (direction) {
 					GunChargeBar.charge -= 1;
@@ -96,7 +104,9 @@ public class Gun {
 				} else {
 					b = new Bullet(graphics().rootLayer(), parent, direction);
 				}
-				pew.play();
+				if (OptionsMenu.soundOptionOn == true) {
+					pew.play();
+				}
 				if (direction) {
 					GunChargeBar.charge -= 1;
 				}
