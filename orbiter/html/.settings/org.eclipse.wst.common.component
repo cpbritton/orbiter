@@ -7,6 +7,15 @@
         <dependent-module archiveName="orbiter-core-0.0.1.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/orbiter-core/orbiter-core">
             <dependency-type>uses</dependency-type>
         </dependent-module>
+        <dependent-module archiveName="playn-core-1.6-SNAPSHOT.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/playn-core/playn-core">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="playn-html-1.6-SNAPSHOT.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/playn-html/playn-html">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="playn-webgl-1.6-SNAPSHOT.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/playn-webgl/playn-webgl">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
         <property name="context-root" value="orbiter-html"/>
         <property name="java-output-path" value="/orbiter-html/target/classes"/>
     </wb-module>
