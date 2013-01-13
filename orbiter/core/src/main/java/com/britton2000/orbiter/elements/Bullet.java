@@ -22,7 +22,7 @@ public class Bullet extends Element {
 	public Bullet(final GroupLayer parentLayer, Element creator,
 			boolean direction) {
 		bulletDirection = direction;
-		image = assets().getImage(this.getImage());
+		image = assets().getImageSync(this.getImage());
 		layer = graphics().createImageLayer(image);
 		layer.setScale(OrbiterMain.imageSize, OrbiterMain.imageSize);
 		layer.setDepth(2);

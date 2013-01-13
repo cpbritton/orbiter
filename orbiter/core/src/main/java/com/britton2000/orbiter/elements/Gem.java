@@ -22,7 +22,7 @@ public class Gem extends Element {
 	int chose, xSpeed, ySpeed, xMoveLeftOrRight;
 
 	public Gem(float canvaswidth, float canvasheight, final GroupLayer parentLayer) {
-		image = assets().getImage("images/gem.png");
+		image = assets().getImageSync("images/gem.png");
 		layer = graphics().createImageLayer(image);
 		layer.setScale(OrbiterMain.imageSize, OrbiterMain.imageSize);
 		layer.setDepth(3);

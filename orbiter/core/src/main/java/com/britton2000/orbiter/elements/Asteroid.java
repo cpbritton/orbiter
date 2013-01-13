@@ -25,10 +25,10 @@ public class Asteroid extends Element {
 	public Asteroid(float canvaswidth, float canvasheight,
 			final GroupLayer parentLayer) {
 
-		image = assets().getImage("images/asteroids/asteroid.png");
-		image1 = assets().getImage("images/asteroids/asteroid2.png");
-		image2 = assets().getImage("images/asteroids/asteroid3.png");
-		image3 = assets().getImage("images/asteroids/asteroid4.png");
+		image = assets().getImageSync("images/asteroids/asteroid.png");
+		image1 = assets().getImageSync("images/asteroids/asteroid2.png");
+		image2 = assets().getImageSync("images/asteroids/asteroid3.png");
+		image3 = assets().getImageSync("images/asteroids/asteroid4.png");
 		layer = graphics().createImageLayer(image);
 		layer.setScale(OrbiterMain.imageSize, OrbiterMain.imageSize);
 		layer.setDepth(3);

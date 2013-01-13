@@ -25,13 +25,13 @@ public class PauseMenu {
 		pauseBackground = assets().getImageSync("images/gui/pauseMenuBackground.png");
 		pauseBackgroundLayer = graphics().createImageLayer(pauseBackground);
 		pauseBackgroundLayer.setScale(OrbiterMain.imageSize, OrbiterMain.imageSize);
-		pauseBackgroundLayer.setTranslation((OrbiterMain.canvasWidth / 2) - (OrbiterMain.imageSize * pauseBackground.width()),
-				(OrbiterMain.canvasHeight / 2) - (OrbiterMain.imageSize * pauseBackground.height()));
+		pauseBackgroundLayer.setTranslation((OrbiterMain.canvasWidth / 2) - (OrbiterMain.imageSize * pauseBackground.width() / 2),
+				(OrbiterMain.canvasHeight / 2) - (OrbiterMain.imageSize * pauseBackground.height() / 2));
 		pauseBackgroundLayer.setVisible(false);
 		pauseBackgroundLayer.setDepth(99);
 		
 		backtogame = assets().getImageSync("images/buttons/backtogame.png");
-		backtogameSelected = assets().getImage("images/buttons/backtogameselected.png");
+		backtogameSelected = assets().getImageSync("images/buttons/backtogameselected.png");
 		backtogameLayer = graphics().createImageLayer(backtogame);
 		backtogameLayer.setScale(OrbiterMain.imageSize, OrbiterMain.imageSize);
 		backtogameLayer.setTranslation((canvaswidth / 2) - ((OrbiterMain.imageSize * pauseBackground.width()) / 2)
@@ -51,7 +51,7 @@ public class PauseMenu {
 		    });
 		
 		options = assets().getImageSync("images/buttons/options.png");
-		optionsSelected = assets().getImage("images/buttons/optionsselected.png");
+		optionsSelected = assets().getImageSync("images/buttons/optionsselected.png");
 		optionsLayer = graphics().createImageLayer(options);
 		optionsLayer.setScale(OrbiterMain.imageSize);
 		optionsLayer.setTranslation((canvaswidth / 2) - ((OrbiterMain.imageSize * pauseBackground.width()) / 2)
@@ -71,7 +71,7 @@ public class PauseMenu {
 		});
 		
 		quit = assets().getImageSync("images/buttons/quit.png");
-		quitSelected = assets().getImage("images/buttons/quitselected.png");
+		quitSelected = assets().getImageSync("images/buttons/quitselected.png");
 		quitLayer = graphics().createImageLayer(quit);
 		quitLayer.setScale(OrbiterMain.imageSize, OrbiterMain.imageSize);
 		quitLayer.setTranslation((canvaswidth / 2) - ((OrbiterMain.imageSize * pauseBackground.width()) / 2)

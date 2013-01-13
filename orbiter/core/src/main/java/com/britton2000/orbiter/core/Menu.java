@@ -29,8 +29,8 @@ public class Menu {
 		menu = graphics().createGroupLayer();
 		menu.setVisible(false);
 
-		start = assets().getImage("images/buttons/play.png");
-		startSelected = assets().getImage("images/buttons/playSelected.png");
+		start = assets().getImageSync("images/buttons/play.png");
+		startSelected = assets().getImageSync("images/buttons/playSelected.png");
 		startLayer = graphics().createImageLayer(start);
 		startLayer.setScale(OrbiterMain.imageSize, OrbiterMain.imageSize);
 		startLayer.setTranslation((OrbiterMain.canvasWidth / 2) - ((OrbiterMain.imageSize * startLayer.width()) / 2),
@@ -38,8 +38,8 @@ public class Menu {
 		startLayer.setVisible(false);
 		startLayer.setDepth(100);
 
-		help = assets().getImage("images/buttons/Help.png");
-		helpSelected = assets().getImage("images/buttons/HelpSelected.png");
+		help = assets().getImageSync("images/buttons/Help.png");
+		helpSelected = assets().getImageSync("images/buttons/HelpSelected.png");
 		helpLayer = graphics().createImageLayer(help);
 		helpLayer.setScale(OrbiterMain.imageSize, OrbiterMain.imageSize);
 		helpLayer.setTranslation((OrbiterMain.canvasWidth / 2) - ((OrbiterMain.imageSize * help.width()) / 2),
@@ -47,7 +47,7 @@ public class Menu {
 		helpLayer.setVisible(false);
 		helpLayer.setDepth(100);
 
-		name = assets().getImage("images/gui/orbiter.png");
+		name = assets().getImageSync("images/gui/orbiter.png");
 		nameLayer = graphics().createImageLayer(name);
 		nameLayer.setScale(OrbiterMain.imageSize, OrbiterMain.imageSize);
 		nameLayer.setTranslation((OrbiterMain.canvasWidth / 2) - ((OrbiterMain.imageSize * name.width()) / 2),
@@ -55,7 +55,7 @@ public class Menu {
 		nameLayer.setVisible(false);
 		nameLayer.setDepth(100);
 		
-		logo = assets().getImage("images/gui/XORlogo.png");
+		logo = assets().getImageSync("images/gui/XORlogo.png");
 		logoLayer = graphics().createImageLayer(logo);
 		logoLayer.setScale(OrbiterMain.imageSize, OrbiterMain.imageSize);
 		logoLayer.setTranslation((OrbiterMain.canvasWidth / 2) - ((OrbiterMain.imageSize * logo.width()) / 2),
@@ -63,15 +63,16 @@ public class Menu {
 		logoLayer.setVisible(false);
 		logoLayer.setDepth(100);
 		
-		quitGame = assets().getImage("images/buttons/quit.png");
-		quitGameSelected = assets().getImage("images/buttons/quitselected.png");
+		quitGame = assets().getImageSync("images/buttons/quit.png");
+		quitGameSelected = assets().getImageSync("images/buttons/quitselected.png");
 		quitGameLayer = graphics().createImageLayer(quitGame);
 		quitGameLayer.setScale(OrbiterMain.imageSize, OrbiterMain.imageSize);
-		quitGameLayer.setTranslation(0, 0);
+		quitGameLayer.setTranslation(OrbiterMain.canvasWidth - (quitGame.width() * OrbiterMain.imageSize),
+				OrbiterMain.canvasHeight - (quitGame.height() * OrbiterMain.imageSize));
 		quitGameLayer.setVisible(false);
 		quitGameLayer.setDepth(100);
 		
-		menuBackground = assets().getImage("images/gui/menuBackground.png");
+		menuBackground = assets().getImageSync("images/gui/menuBackground.png");
 		menuBackgroundLayer = graphics().createImageLayer(menuBackground);
 		menuBackgroundLayer.setScale(OrbiterMain.imageSize, OrbiterMain.imageSize);
 		menuBackgroundLayer.setTranslation(0, 0);
@@ -183,6 +184,14 @@ public class Menu {
 				}
 			} else {
 				helpLayer.setImage(help);
+			}
+			if (buttonSelectionNumber == 2) {
+				quitGameLayer.setImage(quitGameSelected);
+				if (OrbiterMain.enter) {
+			    	System.exit(status);
+				}
+			} else {
+				quitGameLayer.setImage(quitGame);
 			}
 			startLayer.setTranslation((OrbiterMain.canvasWidth / 2) - ((OrbiterMain.imageSize * startLayer.width()) / 2),
 					(OrbiterMain.canvasHeight * 2 / 4) - ((OrbiterMain.imageSize * startLayer.height()) / 2));

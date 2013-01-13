@@ -1,3 +1,5 @@
 .DS_Store
 bin/
 target/
+orbiter/java/target/
+orbiter/core/target/

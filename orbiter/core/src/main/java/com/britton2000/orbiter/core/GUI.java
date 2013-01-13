@@ -11,7 +11,10 @@ import playn.core.Pointer;
 //Max Britton hi
 
 public class GUI {
-	ImageLayer scoreLayer, statsLayer, pauseLayer, nameLayer;
+	ImageLayer scoreLayer;
+	ImageLayer statsLayer;
+	ImageLayer pauseLayer;
+	ImageLayer nameLayer;
 	Image score, stats, pause, name;
 	HealthBar hBar;
 	GunChargeBar cBar;
@@ -21,7 +24,7 @@ public class GUI {
 
 	public GUI(final GroupLayer parentLayer) {
 
-			score = assets().getImage("images/gui/guiLeft.png");
+			score = assets().getImageSync("images/gui/guiLeft.png");
 			scoreLayer = graphics().createImageLayer(score);
 			graphics().rootLayer().add(scoreLayer);
 			scoreLayer.setScale(OrbiterMain.imageSize, OrbiterMain.imageSize);
@@ -29,15 +32,15 @@ public class GUI {
 			scoreLayer.setDepth(100);
 			scoreLayer.setVisible(false);
 			
-			stats = assets().getImage("images/gui/guiRight.png");
+			stats = assets().getImageSync("images/gui/guiRight.png");
 			statsLayer = graphics().createImageLayer(stats);
 			graphics().rootLayer().add(statsLayer);
 			statsLayer.setScale(OrbiterMain.imageSize, OrbiterMain.imageSize);
-			statsLayer.setTranslation(260 * OrbiterMain.imageSize, 0);
+			statsLayer.setTranslation(OrbiterMain.canvasWidth - (stats.width() * OrbiterMain.imageSize), 0);
 			statsLayer.setDepth(100);
 			statsLayer.setVisible(false);
 			
-			pause = assets().getImage("images/buttons/pauseButton.png");
+			pause = assets().getImageSync("images/buttons/pauseButton.png");
 			pauseLayer = graphics().createImageLayer(pause);
 			graphics().rootLayer().add(pauseLayer);
 			pauseLayer.setScale(OrbiterMain.imageSize, OrbiterMain.imageSize);

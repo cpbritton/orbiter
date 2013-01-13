@@ -30,17 +30,17 @@ public class Explosion extends Element {
 
 	public Explosion(float canvasWidth, float canvasHeight, final GroupLayer parentLayer) {
 		_collides=false;
-		boom1 = assets().getImage("images/boom/boom1.png");
-		boom2 = assets().getImage("images/boom/boom2.png");
-		boom3 = assets().getImage("images/boom/boom3.png");
-		boom4 = assets().getImage("images/boom/boom4.png");
-		boom5 = assets().getImage("images/boom/boom5.png");
-		boom6 = assets().getImage("images/boom/boom6.png");
-		boom7 = assets().getImage("images/boom/boom7.png");
-		boom8 = assets().getImage("images/boom/boom8.png");
-		boom9 = assets().getImage("images/boom/boom9.png");
-		boom10= assets().getImage("images/boom/boom10.png");
-		boom11= assets().getImage("images/boom/boom11.png");
+		boom1 = assets().getImageSync("images/boom/boom1.png");
+		boom2 = assets().getImageSync("images/boom/boom2.png");
+		boom3 = assets().getImageSync("images/boom/boom3.png");
+		boom4 = assets().getImageSync("images/boom/boom4.png");
+		boom5 = assets().getImageSync("images/boom/boom5.png");
+		boom6 = assets().getImageSync("images/boom/boom6.png");
+		boom7 = assets().getImageSync("images/boom/boom7.png");
+		boom8 = assets().getImageSync("images/boom/boom8.png");
+		boom9 = assets().getImageSync("images/boom/boom9.png");
+		boom10= assets().getImageSync("images/boom/boom10.png");
+		boom11= assets().getImageSync("images/boom/boom11.png");
 		layer = graphics().createImageLayer(boom1);
 		layer.setScale(OrbiterMain.imageSize, OrbiterMain.imageSize);
 		layer.setDepth(6);

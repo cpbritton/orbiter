@@ -10,8 +10,8 @@ public class OrbiterJava {
 
 	public static void main(String[] args) {
 		Config config = new Config();
-		config.width = 1440;
-		config.height = 800;
+		config.width = 1280;
+		config.height = 720;
 		JavaPlatform platform = JavaPlatform.register(config);
 		platform.assets().setPathPrefix("com/britton2000/orbiter/resources");
 		PlayN.run(new OrbiterMain());

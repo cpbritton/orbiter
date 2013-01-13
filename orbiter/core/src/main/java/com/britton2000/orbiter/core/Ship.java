@@ -32,8 +32,8 @@ public class Ship extends Element {
 
 	public Ship(float canvasWidth, float canvasHeight, final GroupLayer parentLayer) {
 		super();
-		image = assets().getImage("images/Ship1.png");
-		image2 = assets().getImage("images/Ship2.png");
+		image = assets().getImageSync("images/Ship1.png");
+		image2 = assets().getImageSync("images/Ship2.png");
 		layer = graphics().createImageLayer(image);
 		layer.setDepth(4);
 		width = (int) image.width();

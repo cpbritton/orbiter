@@ -25,7 +25,7 @@ public class EnemyShip extends Element implements ElementInterface {
 			dodgeTime, followAttack;
 
 	public EnemyShip(final GroupLayer parentLayer) {
-		image = assets().getImage(this.getImage());
+		image = assets().getImageSync(this.getImage());
 		layer = graphics().createImageLayer(image);
 		layer.setScale(OrbiterMain.imageSize, OrbiterMain.imageSize);
 		layer.setDepth(3);

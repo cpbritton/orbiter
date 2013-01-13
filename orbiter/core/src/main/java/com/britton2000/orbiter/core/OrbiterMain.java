@@ -47,24 +47,24 @@ public class OrbiterMain implements Game, Keyboard.Listener {
 
 	@Override
 	public void init() {
-
-		if (graphics().height() != canvasHeight && graphics().height() > 0) {
-			canvasHeight = graphics().height();
-		}
-		if (graphics().width() != canvasWidth && graphics().width() > 0) {
-			canvasWidth = graphics().width();
-		}
-		imageSize = canvasWidth / 320;
-		if ((canvasWidth / 320) > (canvasHeight / 180)) {
-			imageSize = canvasHeight / 180;
-			canvasWidth = imageSize * 320;
-			canvasHeight = imageSize * 180;
-		}
-		if ((canvasWidth / 320) < (canvasHeight / 180)) {
-			imageSize = canvasWidth / 320;
-			canvasWidth = imageSize * 320;
-			canvasHeight = imageSize * 180;
-		}
+		imageSize = 4;
+//		if (graphics().height() != canvasHeight && graphics().height() > 0) {
+//			canvasHeight = graphics().height();
+//		}
+//		if (graphics().width() != canvasWidth && graphics().width() > 0) {
+//			canvasWidth = graphics().width();
+//		}
+//		imageSize = canvasWidth / 320;
+//		if ((canvasWidth / 320) > (canvasHeight / 180)) {
+//			imageSize = canvasHeight / 180;
+//			canvasWidth = imageSize * 320;
+//			canvasHeight = imageSize * 180;
+//		}
+//		if ((canvasWidth / 320) < (canvasHeight / 180)) {
+//			imageSize = canvasWidth / 320;
+//			canvasWidth = imageSize * 320;
+//			canvasHeight = imageSize * 180;
+//		}
 		keyboard().setListener(this);
 		PlayN.graphics().ctx().setTextureFilter(GLContext.Filter.NEAREST, GLContext.Filter.NEAREST);
 		background = new Background(canvasWidth, canvasHeight, graphics().rootLayer());
@@ -111,7 +111,7 @@ public class OrbiterMain implements Game, Keyboard.Listener {
 			}
 			// spawn asteroid
 			asteroidSpawnRate += 1;
-			if (asteroidSpawnRate > 100) {
+			if (asteroidSpawnRate > 75) {
 				launchAsteroid(true);
 				asteroidSpawnRate = 0;
 			}
@@ -128,7 +128,7 @@ public class OrbiterMain implements Game, Keyboard.Listener {
 				}
 			}
 			enemyRate += 1;
-			if (enemyRate > 500) {
+			if (enemyRate > 1000) {
 				launchEnemy(true);
 				enemyRate = 0;
 			}
