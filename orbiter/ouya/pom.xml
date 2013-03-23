@@ -4,7 +4,7 @@
   <parent>
     <groupId>me.xorga</groupId>
     <artifactId>orbiter</artifactId>
-    <version>0.9.0</version>
+    <version>1.0.0</version>
     
   </parent>
 
@@ -53,7 +53,7 @@
     <dependency>
       <groupId>tv.ouya.console.api</groupId>
       <artifactId>ouya-sdk</artifactId>
-      <version>1.0.0</version>
+      <version>1.0.1</version>
     </dependency>
     
   </dependencies>
@@ -68,6 +68,7 @@
           <androidManifestFile>${project.basedir}/AndroidManifest.xml</androidManifestFile>
           <assetsDirectory>${project.basedir}/assets</assetsDirectory>
           <resourceDirectory>${project.basedir}/res</resourceDirectory>
+          <sign><debug>false</debug></sign>
           <sdk>
             <platform>14</platform>
           </sdk>
@@ -84,6 +85,35 @@
         </configuration>
         <extensions>true</extensions>
       </plugin>
+      <plugin>
+      <groupId>org.apache.maven.plugins</groupId>
+           <artifactId>maven-jarsigner-plugin</artifactId>
+                        <version>1.2</version>
+                        <executions>
+                            <execution>
+                                <id>signing</id>
+                                <goals>
+                                    <goal>sign</goal>
+                                </goals>
+                                <phase>package</phase>
+                                <inherited>true</inherited>
+                                <configuration>
+                                    <archiveDirectory></archiveDirectory>
+                                    <includes>
+                                        <include>target/*.apk</include>
+                                    </includes>
+                                    <keystore>xorgame.keystore</keystore>
+                                    <storepass>1qazxc</storepass>
+                                    <keypass>1qazxc</keypass>
+                                    <alias>xor</alias>
+                                    <arguments>
+                                      <argument>-sigalg</argument><argument>MD5withRSA</argument>
+                                      <argument>-digestalg</argument><argument>SHA1</argument>
+                                    </arguments>
+                                </configuration>
+                            </execution>
+                        </executions>
+          </plugin>
     </plugins>
   </build>
 </project>

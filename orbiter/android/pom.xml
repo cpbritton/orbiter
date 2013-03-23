@@ -4,7 +4,7 @@
   <parent>
     <groupId>me.xorga</groupId>
     <artifactId>orbiter</artifactId>
-    <version>0.9.0</version>
+    <version>1.0.0</version>
   </parent>
 
   <artifactId>orbiter-android</artifactId>
